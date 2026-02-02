@@ -1,57 +1,86 @@
-import React from 'react';
-import FontAwesome from '@expo/vector-icons/FontAwesome';
-import { Link, Tabs } from 'expo-router';
-import { Pressable } from 'react-native';
-
-import Colors from '@/constants/Colors';
-import { useColorScheme } from '@/components/useColorScheme';
-import { useClientOnlyValue } from '@/components/useClientOnlyValue';
-
-// You can explore the built-in icon families and icons on the web at https://icons.expo.fyi/
-function TabBarIcon(props: {
-  name: React.ComponentProps<typeof FontAwesome>['name'];
-  color: string;
-}) {
-  return <FontAwesome size={28} style={{ marginBottom: -3 }} {...props} />;
-}
+import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { Tabs } from "expo-router";
+import React from "react";
 
 export default function TabLayout() {
-  const colorScheme = useColorScheme();
-
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
-        // Disable the static render of the header on web
-        // to prevent a hydration error in React Navigation v6.
-        headerShown: useClientOnlyValue(false, true),
-      }}>
+        tabBarActiveTintColor: "#4CC9F0",
+        tabBarInactiveTintColor: "#555",
+        tabBarStyle: {
+          backgroundColor: "#05070A",
+          borderTopColor: "#1A1E2E",
+          height: 65,
+          paddingBottom: 10,
+          paddingTop: 8,
+        },
+        headerShown: false,
+      }}
+    >
+      {/* 1. Foto do Dia */}
       <Tabs.Screen
         name="index"
         options={{
-          title: 'Tab One',
-          tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
-          headerRight: () => (
-            <Link href="/modal" asChild>
-              <Pressable>
-                {({ pressed }) => (
-                  <FontAwesome
-                    name="info-circle"
-                    size={25}
-                    color={Colors[colorScheme ?? 'light'].text}
-                    style={{ marginRight: 15, opacity: pressed ? 0.5 : 1 }}
-                  />
-                )}
-              </Pressable>
-            </Link>
+          title: "Foto do Dia",
+          tabBarIcon: ({ color, size }) => (
+            <MaterialCommunityIcons
+              name="telescope"
+              size={size + 2}
+              color={color}
+            />
           ),
         }}
       />
+
+      {/* 2. O Céu */}
       <Tabs.Screen
-        name="two"
+        name="sky"
         options={{
-          title: 'Tab Two',
-          tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
+          title: "O Céu",
+          tabBarIcon: ({ color, size }) => (
+            <MaterialCommunityIcons
+              name="star-four-points"
+              size={size}
+              color={color}
+            />
+          ),
+        }}
+      />
+
+      {/* 3. Wiki - USANDO METEOR PARA REPRESENTAR ASTEROIDE */}
+      <Tabs.Screen
+        name="exoplanet" // Deve ser igual ao nome do arquivo
+        options={{
+          title: "exoplanetas",
+          tabBarIcon: ({ color, size }) => (
+            <MaterialCommunityIcons name="earth" size={size} color={color} />
+          ),
+        }}
+      />
+      {/* 3. Wiki - USANDO METEOR PARA REPRESENTAR ASTEROIDE */}
+      <Tabs.Screen
+        name="hubble" // Deve ser igual ao nome do arquivo
+        options={{
+          title: "Hubble",
+          tabBarIcon: ({ color, size }) => (
+            <MaterialCommunityIcons name="grid" size={size} color={color} />
+          ),
+        }}
+      />
+
+      {/* 4. Insights */}
+      <Tabs.Screen
+        name="stars"
+        options={{
+          title: "stars",
+          tabBarIcon: ({ color, size }) => (
+            <MaterialCommunityIcons
+              name="star-outline"
+              size={size}
+              color={color}
+            />
+          ),
         }}
       />
     </Tabs>
