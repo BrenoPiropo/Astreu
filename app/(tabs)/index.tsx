@@ -1,4 +1,5 @@
 import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { useRouter } from "expo-router"; // Importado para navegação
 import React, { useEffect, useState } from "react";
 import {
   Image,
@@ -14,7 +15,6 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { Loading } from "../../components/Loading";
 import { ApodResponse, getApod } from "../../services/api";
 
-// Lista de curiosidades para rotacionar
 const SPACE_FACTS = [
   "O pôr do sol em Marte é azul devido à poeira fina em sua atmosfera.",
   "Existe uma nuvem de álcool no espaço que é 463 bilhões de quilômetros de largura.",
@@ -32,10 +32,10 @@ export default function ApodScreen() {
   const [dailyFact, setDailyFact] = useState("");
 
   const insets = useSafeAreaInsets();
+  const router = useRouter(); // Hook de navegação
 
   useEffect(() => {
     loadData();
-    // Seleciona uma curiosidade baseada no dia do mês
     const day = new Date().getDate();
     setDailyFact(SPACE_FACTS[day % SPACE_FACTS.length]);
   }, []);
@@ -57,10 +57,20 @@ export default function ApodScreen() {
     <View style={[styles.container, { paddingTop: insets.top + 10 }]}>
       <StatusBar barStyle="light-content" backgroundColor="#0B0D17" />
 
-      {/* CABEÇALHO */}
+      {/* CABEÇALHO COM BOTÃO MEU ESPAÇO */}
       <View style={styles.header}>
-        <Text style={styles.headerSubtitle}>EXPLORAÇÃO ESPACIAL</Text>
-        <Text style={styles.headerTitle}>Foto do Dia</Text>
+        <View>
+          <Text style={styles.headerSubtitle}>EXPLORAÇÃO ESPACIAL</Text>
+          <Text style={styles.headerTitle}>Foto do Dia</Text>
+        </View>
+
+        <TouchableOpacity
+          style={styles.userButton}
+          onPress={() => router.push("/profile")} // Redireciona para a área do usuário
+        >
+          <MaterialCommunityIcons name="account" size={24} color="#000" />
+          <Text style={styles.userButtonText}>MEU ESPAÇO</Text>
+        </TouchableOpacity>
       </View>
 
       <ScrollView
@@ -69,7 +79,6 @@ export default function ApodScreen() {
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{ paddingBottom: insets.bottom + 100 }}
       >
-        {/* CONTAINER DA IMAGEM PRINCIPAL */}
         <View style={styles.imageWrapper}>
           <Image
             source={{ uri: data?.url }}
@@ -81,7 +90,6 @@ export default function ApodScreen() {
           </View>
         </View>
 
-        {/* CARD DE CURIOSIDADE DINÂMICA */}
         <View style={styles.factCard}>
           <View style={styles.factHeader}>
             <MaterialCommunityIcons
@@ -94,10 +102,8 @@ export default function ApodScreen() {
           <Text style={styles.factText}>{dailyFact}</Text>
         </View>
 
-        {/* TÍTULO E BOTÃO DE DETALHES */}
         <View style={styles.actionCard}>
           <Text style={styles.mainTitle}>{data?.title}</Text>
-
           <TouchableOpacity
             style={styles.detailButton}
             onPress={() => setModalVisible(true)}
@@ -113,13 +119,8 @@ export default function ApodScreen() {
         </View>
       </ScrollView>
 
-      {/* MODAL DE DESCRIÇÃO (NASA) */}
-      <Modal
-        animationType="slide"
-        transparent={true}
-        visible={modalVisible}
-        onRequestClose={() => setModalVisible(false)}
-      >
+      {/* MODAL DE DESCRIÇÃO */}
+      <Modal animationType="slide" transparent={true} visible={modalVisible}>
         <View style={styles.modalOverlay}>
           <View
             style={[styles.modalContent, { paddingBottom: insets.bottom + 20 }]}
@@ -137,7 +138,6 @@ export default function ApodScreen() {
                 />
               </TouchableOpacity>
             </View>
-
             <ScrollView showsVerticalScrollIndicator={false}>
               <Text style={styles.modalTitle}>{data?.title}</Text>
               <View style={styles.infoBadge}>
@@ -158,7 +158,13 @@ export default function ApodScreen() {
 
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: "#0B0D17" },
-  header: { paddingHorizontal: 20, paddingBottom: 20 },
+  header: {
+    paddingHorizontal: 20,
+    paddingBottom: 20,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
   headerSubtitle: {
     color: "#4CC9F0",
     fontSize: 10,
@@ -166,6 +172,23 @@ const styles = StyleSheet.create({
     letterSpacing: 2,
   },
   headerTitle: { color: "#FFF", fontSize: 32, fontWeight: "bold" },
+
+  // Estilo do novo botão Meu Espaço
+  userButton: {
+    backgroundColor: "#4CC9F0",
+    flexDirection: "row",
+    alignItems: "center",
+    paddingVertical: 8,
+    paddingHorizontal: 12,
+    borderRadius: 20,
+    gap: 5,
+  },
+  userButtonText: {
+    color: "#000",
+    fontSize: 10,
+    fontWeight: "bold",
+  },
+
   scrollView: { flex: 1 },
   imageWrapper: { width: "100%", height: 400, position: "relative" },
   image: { width: "100%", height: "100%", backgroundColor: "#1A1E2E" },
@@ -179,8 +202,6 @@ const styles = StyleSheet.create({
     borderRadius: 20,
   },
   dateText: { color: "#FFF", fontSize: 12, fontWeight: "600" },
-
-  // Novo Estilo do Card de Curiosidade
   factCard: {
     margin: 20,
     padding: 15,
@@ -207,7 +228,6 @@ const styles = StyleSheet.create({
     lineHeight: 20,
     fontStyle: "italic",
   },
-
   actionCard: {
     paddingHorizontal: 25,
     paddingBottom: 25,
@@ -236,7 +256,6 @@ const styles = StyleSheet.create({
     fontSize: 14,
     letterSpacing: 1,
   },
-
   modalOverlay: {
     flex: 1,
     backgroundColor: "rgba(0,0,0,0.8)",

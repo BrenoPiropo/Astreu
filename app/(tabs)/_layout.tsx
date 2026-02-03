@@ -48,19 +48,20 @@ export default function TabLayout() {
         }}
       />
 
-      {/* 3. Wiki - USANDO METEOR PARA REPRESENTAR ASTEROIDE */}
+      {/* 3. Exoplanetas */}
       <Tabs.Screen
-        name="exoplanet" // Deve ser igual ao nome do arquivo
+        name="exoplanet"
         options={{
-          title: "exoplanetas",
+          title: "Exoplanetas",
           tabBarIcon: ({ color, size }) => (
             <MaterialCommunityIcons name="earth" size={size} color={color} />
           ),
         }}
       />
-      {/* 3. Wiki - USANDO METEOR PARA REPRESENTAR ASTEROIDE */}
+
+      {/* 4. Hubble */}
       <Tabs.Screen
-        name="hubble" // Deve ser igual ao nome do arquivo
+        name="hubble"
         options={{
           title: "Hubble",
           tabBarIcon: ({ color, size }) => (
@@ -69,11 +70,11 @@ export default function TabLayout() {
         }}
       />
 
-      {/* 4. Insights */}
+      {/* 5. Estrelas */}
       <Tabs.Screen
         name="stars"
         options={{
-          title: "stars",
+          title: "Stars",
           tabBarIcon: ({ color, size }) => (
             <MaterialCommunityIcons
               name="star-outline"
@@ -81,6 +82,14 @@ export default function TabLayout() {
               color={color}
             />
           ),
+        }}
+      />
+
+      {/* 6. Profile (OCULTO DA TAB BAR) */}
+      <Tabs.Screen
+        name="profile"
+        options={{
+          href: null, // Esta linha remove o ícone da barra inferior
         }}
       />
     </Tabs>
