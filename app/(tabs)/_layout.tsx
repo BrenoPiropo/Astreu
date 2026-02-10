@@ -5,6 +5,7 @@ import React from "react";
 export default function TabLayout() {
   return (
     <Tabs
+      initialRouteName="community"
       screenOptions={{
         tabBarActiveTintColor: "#4CC9F0",
         tabBarInactiveTintColor: "#555",
@@ -18,17 +19,14 @@ export default function TabLayout() {
         headerShown: false,
       }}
     >
-      {/* 1. Foto do Dia */}
+      {/* 1. Community - AGORA ESPAÇO COMPARTILHADO */}
       <Tabs.Screen
-        name="index"
+        name="community"
         options={{
-          title: "Foto do Dia",
-          tabBarIcon: ({ color, size }) => (
-            <MaterialCommunityIcons
-              name="telescope"
-              size={size + 2}
-              color={color}
-            />
+          // Mudando o nome e adicionando o emoji de foguete no texto
+          title: "Espaço Compartilhado 🚀",
+          tabBarIcon: ({ color }) => (
+            <MaterialCommunityIcons name="rocket" size={26} color={color} />
           ),
         }}
       />
@@ -48,18 +46,7 @@ export default function TabLayout() {
         }}
       />
 
-      {/* 3. Exoplanetas */}
-      <Tabs.Screen
-        name="exoplanet"
-        options={{
-          title: "Exoplanetas",
-          tabBarIcon: ({ color, size }) => (
-            <MaterialCommunityIcons name="earth" size={size} color={color} />
-          ),
-        }}
-      />
-
-      {/* 4. Hubble */}
+      {/* 3. Hubble */}
       <Tabs.Screen
         name="hubble"
         options={{
@@ -70,28 +57,25 @@ export default function TabLayout() {
         }}
       />
 
-      {/* 5. Estrelas */}
+      {/* 4. Foto do Dia */}
       <Tabs.Screen
-        name="stars"
+        name="index"
         options={{
-          title: "Stars",
+          title: "Foto do Dia",
           tabBarIcon: ({ color, size }) => (
             <MaterialCommunityIcons
-              name="star-outline"
-              size={size}
+              name="telescope"
+              size={size + 2}
               color={color}
             />
           ),
         }}
       />
 
-      {/* 6. Profile (OCULTO DA TAB BAR) */}
-      <Tabs.Screen
-        name="profile"
-        options={{
-          href: null, // Esta linha remove o ícone da barra inferior
-        }}
-      />
+      {/* --- TELAS OCULTAS --- */}
+      <Tabs.Screen name="exoplanet" options={{ href: null }} />
+      <Tabs.Screen name="stars" options={{ href: null }} />
+      <Tabs.Screen name="profile" options={{ href: null }} />
     </Tabs>
   );
 }

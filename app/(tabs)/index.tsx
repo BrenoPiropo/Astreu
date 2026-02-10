@@ -1,5 +1,5 @@
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import { useRouter } from "expo-router"; // Importado para navegação
+import { useRouter } from "expo-router";
 import React, { useEffect, useState } from "react";
 import {
   Image,
@@ -19,7 +19,6 @@ const SPACE_FACTS = [
   "O pôr do sol em Marte é azul devido à poeira fina em sua atmosfera.",
   "Existe uma nuvem de álcool no espaço que é 463 bilhões de quilômetros de largura.",
   "Um dia em Vênus é mais longo do que um ano inteiro na Terra.",
-  "Se você pudesse colocar Saturno em uma banheira gigante, ele flutuaria na água.",
   "O silêncio no espaço é absoluto, pois não há ar para transportar ondas sonoras.",
   "A pegada dos astronautas na Lua pode durar milhões de anos, pois não há vento.",
   "Existem mais estrelas no universo do que grãos de areia em todas as praias da Terra.",
@@ -29,10 +28,11 @@ export default function ApodScreen() {
   const [data, setData] = useState<ApodResponse | null>(null);
   const [loading, setLoading] = useState(true);
   const [modalVisible, setModalVisible] = useState(false);
+  const [menuVisible, setMenuVisible] = useState(false);
   const [dailyFact, setDailyFact] = useState("");
 
   const insets = useSafeAreaInsets();
-  const router = useRouter(); // Hook de navegação
+  const router = useRouter();
 
   useEffect(() => {
     loadData();
@@ -51,26 +51,35 @@ export default function ApodScreen() {
     }
   }
 
+  const navigateTo = (path: string) => {
+    setMenuVisible(false);
+    setTimeout(() => {
+      router.push(path as any);
+    }, 100);
+  };
+
   if (loading) return <Loading />;
 
   return (
     <View style={[styles.container, { paddingTop: insets.top + 10 }]}>
       <StatusBar barStyle="light-content" backgroundColor="#0B0D17" />
 
-      {/* CABEÇALHO COM BOTÃO MEU ESPAÇO */}
+      {/* HEADER: HAMBURGUER NA ESQUERDA */}
       <View style={styles.header}>
-        <View>
+        <TouchableOpacity
+          style={styles.menuButton}
+          onPress={() => setMenuVisible(true)}
+        >
+          <MaterialCommunityIcons name="menu" size={32} color="#4CC9F0" />
+        </TouchableOpacity>
+
+        <View style={styles.headerTitleContainer}>
           <Text style={styles.headerSubtitle}>EXPLORAÇÃO ESPACIAL</Text>
           <Text style={styles.headerTitle}>Foto do Dia</Text>
         </View>
 
-        <TouchableOpacity
-          style={styles.userButton}
-          onPress={() => router.push("/profile")} // Redireciona para a área do usuário
-        >
-          <MaterialCommunityIcons name="account" size={24} color="#000" />
-          <Text style={styles.userButtonText}>MEU ESPAÇO</Text>
-        </TouchableOpacity>
+        {/* Espaçador para manter o título centralizado ou equilibrado */}
+        <View style={{ width: 32 }} />
       </View>
 
       <ScrollView
@@ -119,7 +128,84 @@ export default function ApodScreen() {
         </View>
       </ScrollView>
 
-      {/* MODAL DE DESCRIÇÃO */}
+      {/* MODAL MENU LATERAL ESQUERDO */}
+      <Modal
+        animationType="fade"
+        transparent={true}
+        visible={menuVisible}
+        onRequestClose={() => setMenuVisible(false)}
+      >
+        <View style={styles.drawerOverlay}>
+          <View style={[styles.drawerContent, { paddingTop: insets.top + 20 }]}>
+            {/* PERFIL E BOTÃO MEU ESPAÇO */}
+            <View style={styles.profileSection}>
+              <View style={styles.profileImageContainer}>
+                <Image
+                  source={{ uri: "https://github.com/BrenoPiropo.png" }}
+                  style={styles.profileImage}
+                />
+              </View>
+              <Text style={styles.welcomeText}>Olá,</Text>
+              <Text style={styles.userNameText}>Breno Piropo</Text>
+
+              <TouchableOpacity
+                style={styles.userButtonMenu}
+                onPress={() => navigateTo("/profile")}
+              >
+                <MaterialCommunityIcons
+                  name="account-star"
+                  size={18}
+                  color="#000"
+                />
+                <Text style={styles.userButtonText}>
+                  Meu Diario Astronomico
+                </Text>
+              </TouchableOpacity>
+            </View>
+
+            <View style={styles.drawerDivider} />
+
+            <Text style={styles.drawerSectionLabel}>EXPLORAR</Text>
+
+            <TouchableOpacity
+              style={styles.drawerItem}
+              onPress={() => navigateTo("/exoplanet")}
+            >
+              <MaterialCommunityIcons name="earth" size={24} color="#4CC9F0" />
+              <Text style={styles.drawerItemText}>Exoplanetas</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              style={styles.drawerItem}
+              onPress={() => navigateTo("/stars")}
+            >
+              <MaterialCommunityIcons
+                name="star-shooting"
+                size={24}
+                color="#4CC9F0"
+              />
+              <Text style={styles.drawerItemText}>Estrelas</Text>
+            </TouchableOpacity>
+
+            {/* BOTÃO SAIR NO FINAL */}
+            <TouchableOpacity
+              style={styles.logoutBtn}
+              onPress={() => setMenuVisible(false)}
+            >
+              <MaterialCommunityIcons name="logout" size={22} color="#FF4D4D" />
+              <Text style={styles.logoutText}>Sair da Conta</Text>
+            </TouchableOpacity>
+          </View>
+
+          {/* Área de toque para fechar (agora na direita) */}
+          <TouchableOpacity
+            style={styles.drawerCloseArea}
+            onPress={() => setMenuVisible(false)}
+          />
+        </View>
+      </Modal>
+
+      {/* MODAL DE DETALHES */}
       <Modal animationType="slide" transparent={true} visible={modalVisible}>
         <View style={styles.modalOverlay}>
           <View
@@ -140,13 +226,6 @@ export default function ApodScreen() {
             </View>
             <ScrollView showsVerticalScrollIndicator={false}>
               <Text style={styles.modalTitle}>{data?.title}</Text>
-              <View style={styles.infoBadge}>
-                <Text style={styles.infoBadgeText}>
-                  Astronomy Picture of the Day
-                </Text>
-              </View>
-              <View style={styles.divider} />
-              <Text style={styles.sectionLabel}>EXPLICAÇÃO CIENTÍFICA</Text>
               <Text style={styles.description}>{data?.explanation}</Text>
             </ScrollView>
           </View>
@@ -162,80 +241,127 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingBottom: 20,
     flexDirection: "row",
-    justifyContent: "space-between",
     alignItems: "center",
+    justifyContent: "space-between",
   },
+  headerTitleContainer: { alignItems: "center", flex: 1 },
   headerSubtitle: {
     color: "#4CC9F0",
     fontSize: 10,
     fontWeight: "bold",
     letterSpacing: 2,
   },
-  headerTitle: { color: "#FFF", fontSize: 32, fontWeight: "bold" },
+  headerTitle: { color: "#FFF", fontSize: 24, fontWeight: "bold" },
+  menuButton: { padding: 5 },
 
-  // Estilo do novo botão Meu Espaço
-  userButton: {
+  // --- DRAWER ESQUERDO ---
+  drawerOverlay: {
+    flex: 1,
+    backgroundColor: "rgba(0,0,0,0.85)",
+    flexDirection: "row",
+  },
+  drawerCloseArea: { flex: 1 },
+  drawerContent: {
+    width: 280,
+    backgroundColor: "#0B0D17",
+    height: "100%",
+    padding: 25,
+    borderRightWidth: 1,
+    borderRightColor: "#1A1E2E",
+  },
+  profileSection: { alignItems: "center", marginBottom: 10 },
+  profileImageContainer: {
+    width: 80,
+    height: 80,
+    borderRadius: 40,
+    borderWidth: 2,
+    borderColor: "#4CC9F0",
+    padding: 3,
+    marginBottom: 10,
+  },
+  profileImage: { width: "100%", height: "100%", borderRadius: 40 },
+  welcomeText: { color: "#666", fontSize: 13 },
+  userNameText: {
+    color: "#FFF",
+    fontSize: 18,
+    fontWeight: "bold",
+    marginBottom: 15,
+  },
+
+  userButtonMenu: {
     backgroundColor: "#4CC9F0",
     flexDirection: "row",
     alignItems: "center",
     paddingVertical: 8,
-    paddingHorizontal: 12,
+    paddingHorizontal: 16,
     borderRadius: 20,
-    gap: 5,
+    gap: 8,
   },
-  userButtonText: {
-    color: "#000",
-    fontSize: 10,
-    fontWeight: "bold",
-  },
+  userButtonText: { color: "#000", fontSize: 11, fontWeight: "bold" },
 
+  drawerDivider: { height: 1, backgroundColor: "#1A1E2E", marginVertical: 25 },
+  drawerSectionLabel: {
+    color: "#444",
+    fontSize: 11,
+    fontWeight: "bold",
+    letterSpacing: 1.5,
+    marginBottom: 15,
+  },
+  drawerItem: {
+    flexDirection: "row",
+    alignItems: "center",
+    paddingVertical: 15,
+    gap: 15,
+  },
+  drawerItemText: { color: "#DDD", fontSize: 16, fontWeight: "500" },
+
+  logoutBtn: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 15,
+    marginTop: "auto",
+    marginBottom: 20,
+  },
+  logoutText: { color: "#FF4D4D", fontSize: 15, fontWeight: "bold" },
+
+  // --- RESTO DO LAYOUT ---
   scrollView: { flex: 1 },
-  imageWrapper: { width: "100%", height: 400, position: "relative" },
-  image: { width: "100%", height: "100%", backgroundColor: "#1A1E2E" },
+  imageWrapper: { width: "100%", height: 400 },
+  image: { width: "100%", height: "100%" },
   dateOverlay: {
     position: "absolute",
     bottom: 20,
     right: 20,
     backgroundColor: "rgba(0,0,0,0.7)",
-    paddingHorizontal: 12,
-    paddingVertical: 6,
-    borderRadius: 20,
+    padding: 8,
+    borderRadius: 10,
   },
-  dateText: { color: "#FFF", fontSize: 12, fontWeight: "600" },
+  dateText: { color: "#FFF", fontSize: 12 },
   factCard: {
     margin: 20,
     padding: 15,
-    backgroundColor: "rgba(76, 201, 240, 0.05)",
+    backgroundColor: "#0F111A",
     borderRadius: 15,
     borderWidth: 1,
-    borderColor: "rgba(76, 201, 240, 0.2)",
+    borderColor: "#1A1E2E",
   },
   factHeader: {
     flexDirection: "row",
     alignItems: "center",
-    marginBottom: 8,
     gap: 8,
+    marginBottom: 5,
   },
-  factLabel: {
-    color: "#4CC9F0",
-    fontSize: 12,
-    fontWeight: "bold",
-    letterSpacing: 1,
-  },
+  factLabel: { color: "#4CC9F0", fontSize: 11, fontWeight: "bold" },
   factText: {
-    color: "#DDD",
+    color: "#BBB",
     fontSize: 14,
-    lineHeight: 20,
     fontStyle: "italic",
+    lineHeight: 20,
   },
-  actionCard: {
-    paddingHorizontal: 25,
-    paddingBottom: 25,
-    alignItems: "center",
-  },
+  actionCard: { padding: 20, alignItems: "center" },
   mainTitle: {
     color: "#FFF",
-    fontSize: 22,
+    fontSize: 20,
     fontWeight: "bold",
     textAlign: "center",
     marginBottom: 20,
@@ -243,73 +369,38 @@ const styles = StyleSheet.create({
   detailButton: {
     flexDirection: "row",
     backgroundColor: "#4CC9F0",
-    paddingHorizontal: 25,
     paddingVertical: 15,
+    paddingHorizontal: 30,
     borderRadius: 30,
     alignItems: "center",
     gap: 10,
-    elevation: 5,
   },
-  detailButtonText: {
-    color: "#000",
-    fontWeight: "bold",
-    fontSize: 14,
-    letterSpacing: 1,
-  },
+  detailButtonText: { fontWeight: "bold", letterSpacing: 1 },
   modalOverlay: {
     flex: 1,
-    backgroundColor: "rgba(0,0,0,0.8)",
+    backgroundColor: "rgba(0,0,0,0.9)",
     justifyContent: "flex-end",
   },
   modalContent: {
     backgroundColor: "#0B0D17",
     borderTopLeftRadius: 30,
     borderTopRightRadius: 30,
-    paddingHorizontal: 25,
-    maxHeight: "80%",
-    borderWidth: 1,
-    borderColor: "#1A1E2E",
+    padding: 25,
+    maxHeight: "85%",
   },
-  modalHeader: {
-    flexDirection: "row",
-    justifyContent: "center",
-    alignItems: "center",
-    paddingVertical: 15,
-  },
+  modalHeader: { alignItems: "center", marginBottom: 20 },
   dragIndicator: {
     width: 40,
-    height: 4,
+    height: 5,
     backgroundColor: "#333",
-    borderRadius: 2,
+    borderRadius: 10,
   },
   closeButton: { position: "absolute", right: 0 },
   modalTitle: {
     color: "#FFF",
     fontSize: 22,
     fontWeight: "bold",
-    marginBottom: 10,
-  },
-  infoBadge: {
-    backgroundColor: "rgba(76, 201, 240, 0.1)",
-    alignSelf: "flex-start",
-    paddingHorizontal: 8,
-    paddingVertical: 4,
-    borderRadius: 5,
     marginBottom: 15,
   },
-  infoBadgeText: { color: "#4CC9F0", fontSize: 10, fontWeight: "bold" },
-  divider: { height: 1, backgroundColor: "#1A1E2E", marginBottom: 20 },
-  sectionLabel: {
-    color: "#555",
-    fontSize: 11,
-    fontWeight: "bold",
-    letterSpacing: 1.5,
-    marginBottom: 10,
-  },
-  description: {
-    color: "#BBB",
-    lineHeight: 24,
-    fontSize: 16,
-    textAlign: "justify",
-  },
+  description: { color: "#BBB", fontSize: 16, lineHeight: 24 },
 });

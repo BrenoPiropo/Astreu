@@ -2,49 +2,102 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as ImagePicker from "expo-image-picker";
 import { useRouter } from "expo-router";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import {
-    Alert,
-    Image,
-    Modal,
-    ScrollView,
-    StyleSheet,
-    Text,
-    TextInput,
-    TouchableOpacity,
-    View,
+  Dimensions,
+  Image,
+  KeyboardAvoidingView,
+  Modal,
+  Platform,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
 } from "react-native";
+import { Calendar, LocaleConfig } from "react-native-calendars";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
-// --- INTERFACES ---
+const { height: SCREEN_HEIGHT } = Dimensions.get("window");
+
+LocaleConfig.locales["pt-br"] = {
+  monthNames: [
+    "Janeiro",
+    "Fevereiro",
+    "Março",
+    "Abril",
+    "Maio",
+    "Junho",
+    "Julho",
+    "Agosto",
+    "Setembro",
+    "Outubro",
+    "Novembro",
+    "Dezembro",
+  ],
+  monthNamesShort: [
+    "Jan.",
+    "Fev.",
+    "Mar.",
+    "Abr.",
+    "Mai.",
+    "Jun.",
+    "Jul.",
+    "Ago.",
+    "Set.",
+    "Out.",
+    "Nov.",
+    "Dez.",
+  ],
+  dayNames: [
+    "Domingo",
+    "Segunda",
+    "Terça",
+    "Quarta",
+    "Quinta",
+    "Sexta",
+    "Sábado",
+  ],
+  dayNamesShort: ["DOM", "SEG", "TER", "QUA", "QUI", "SEX", "SAB"],
+  today: "Hoje",
+};
+LocaleConfig.defaultLocale = "pt-br";
+
 interface UserPhoto {
   id: string;
   uri: string;
   date: string;
   description: string;
 }
-
 interface StudyNote {
   id: string;
   text: string;
   date: string;
 }
+interface StudyTask {
+  id: string;
+  title: string;
+  status: "aberto" | "concluída";
+}
 
 export default function ProfileScreen() {
   const [photos, setPhotos] = useState<UserPhoto[]>([]);
   const [notes, setNotes] = useState<StudyNote[]>([]);
+  const [tasks, setTasks] = useState<StudyTask[]>([]);
 
-  // Controles de Modais
+  const [selectedDate, setSelectedDate] = useState(
+    new Date().toISOString().split("T")[0],
+  );
+
   const [noteModalVisible, setNoteModalVisible] = useState(false);
+  const [viewNoteModalVisible, setViewNoteModalVisible] = useState(false);
+  const [taskModalVisible, setTaskModalVisible] = useState(false);
   const [photoInputModalVisible, setPhotoInputModalVisible] = useState(false);
-  const [viewModalVisible, setViewModalVisible] = useState(false);
 
-  // Estados de Edição e Criação
-  const [isEditing, setIsEditing] = useState(false);
   const [currentNoteText, setCurrentNoteText] = useState("");
+  const [currentTaskTitle, setCurrentTaskTitle] = useState("");
   const [tempPhotoUri, setTempPhotoUri] = useState("");
-  const [tempPhotoDesc, setTempPhotoDesc] = useState("");
-  const [selectedItem, setSelectedItem] = useState<any>(null);
 
   const insets = useSafeAreaInsets();
   const router = useRouter();
@@ -53,319 +106,327 @@ export default function ProfileScreen() {
     loadUserData();
   }, []);
 
-  // --- CARREGAMENTO DE DADOS ---
   async function loadUserData() {
     try {
-      const savedPhotos = await AsyncStorage.getItem("@minerva:photos");
-      const savedNotes = await AsyncStorage.getItem("@minerva:notes");
-      if (savedPhotos) setPhotos(JSON.parse(savedPhotos));
-      if (savedNotes) setNotes(JSON.parse(savedNotes));
+      const [p, n, t] = await Promise.all([
+        AsyncStorage.getItem("@astreu:photos"),
+        AsyncStorage.getItem("@astreu:notes"),
+        AsyncStorage.getItem("@astreu:tasks"),
+      ]);
+      if (p) setPhotos(JSON.parse(p));
+      if (n) setNotes(JSON.parse(n));
+      if (t) setTasks(JSON.parse(t));
     } catch (e) {
-      console.error("Erro ao carregar dados", e);
+      console.error(e);
     }
   }
 
-  // --- LÓGICA DE FOTOS ---
-  async function handlePickPhoto() {
-    const { status } = await ImagePicker.requestCameraPermissionsAsync();
-    if (status !== "granted") {
-      Alert.alert(
-        "Erro",
-        "Precisamos de acesso à câmera para registrar o cosmos!",
-      );
-      return;
-    }
+  const dailyNote = notes.find((n) => n.date === selectedDate);
+  const dailyPhotos = photos.filter((p) => p.date === selectedDate);
 
-    const result = await ImagePicker.launchCameraAsync({
-      allowsEditing: true,
-      aspect: [4, 3],
-      quality: 0.7,
+  const markedDates = useMemo(() => {
+    const marks: any = {};
+    notes.forEach((n) => {
+      marks[n.date] = { marked: true, dotColor: "#4CC9F0" };
     });
-
-    if (!result.canceled) {
-      setTempPhotoUri(result.assets[0].uri);
-      setPhotoInputModalVisible(true);
-    }
-  }
-
-  async function saveNewPhoto() {
-    const newPhoto: UserPhoto = {
-      id: String(Date.now()),
-      uri: tempPhotoUri,
-      date: new Date().toLocaleDateString("pt-BR"),
-      description: tempPhotoDesc || "Sem descrição registrada.",
+    photos.forEach((p) => {
+      marks[p.date] = { ...marks[p.date], marked: true, dotColor: "#4CC9F0" };
+    });
+    marks[selectedDate] = {
+      ...marks[selectedDate],
+      selected: true,
+      selectedColor: "#4CC9F0",
     };
-    const updated = [newPhoto, ...photos];
-    setPhotos(updated);
-    await AsyncStorage.setItem("@minerva:photos", JSON.stringify(updated));
-    setPhotoInputModalVisible(false);
-    setTempPhotoDesc("");
+    return marks;
+  }, [notes, photos, selectedDate]);
+
+  // --- FUNÇÕES DE METAS (TASKS) ---
+  async function saveNewTask() {
+    if (!currentTaskTitle.trim()) return;
+    const newTask: StudyTask = {
+      id: String(Date.now()),
+      title: currentTaskTitle,
+      status: "aberto",
+    };
+    const updated = [newTask, ...tasks];
+    setTasks(updated);
+    await AsyncStorage.setItem("@astreu:tasks", JSON.stringify(updated));
+    setCurrentTaskTitle("");
+    setTaskModalVisible(false);
   }
 
-  // --- LÓGICA DE NOTAS ---
-  async function saveNewNote() {
+  async function toggleTaskStatus(id: string) {
+    const updated = tasks.map((t) =>
+      t.id === id
+        ? { ...t, status: t.status === "concluída" ? "aberto" : "concluída" }
+        : t,
+    );
+    setTasks(updated as StudyTask[]);
+    await AsyncStorage.setItem("@astreu:tasks", JSON.stringify(updated));
+  }
+
+  async function deleteTask(id: string) {
+    const updated = tasks.filter((t) => t.id !== id);
+    setTasks(updated);
+    await AsyncStorage.setItem("@astreu:tasks", JSON.stringify(updated));
+  }
+
+  // --- FUNÇÕES DE NOTAS ---
+  async function saveNote() {
     if (!currentNoteText.trim()) return;
     const newNote: StudyNote = {
       id: String(Date.now()),
       text: currentNoteText,
-      date: new Date().toLocaleDateString("pt-BR"),
+      date: selectedDate,
     };
-    const updated = [newNote, ...notes];
+    const filtered = notes.filter((n) => n.date !== selectedDate);
+    const updated = [newNote, ...filtered];
     setNotes(updated);
-    await AsyncStorage.setItem("@minerva:notes", JSON.stringify(updated));
-    setCurrentNoteText("");
+    await AsyncStorage.setItem("@astreu:notes", JSON.stringify(updated));
     setNoteModalVisible(false);
   }
 
-  // --- EXCLUSÃO E EDIÇÃO ---
-  const handleDelete = () => {
-    Alert.alert("Excluir", "Deseja remover este registro do seu espaço?", [
-      { text: "Cancelar", style: "cancel" },
-      {
-        text: "Excluir",
-        style: "destructive",
-        onPress: async () => {
-          if (selectedItem.uri) {
-            const updated = photos.filter((p) => p.id !== selectedItem.id);
-            setPhotos(updated);
-            await AsyncStorage.setItem(
-              "@minerva:photos",
-              JSON.stringify(updated),
-            );
-          } else {
-            const updated = notes.filter((n) => n.id !== selectedItem.id);
-            setNotes(updated);
-            await AsyncStorage.setItem(
-              "@minerva:notes",
-              JSON.stringify(updated),
-            );
-          }
-          setViewModalVisible(false);
-        },
-      },
-    ]);
-  };
-
-  const handleUpdate = async () => {
-    if (selectedItem.uri) {
-      const updated = photos.map((p) =>
-        p.id === selectedItem.id ? { ...p, description: tempPhotoDesc } : p,
-      );
+  async function handlePickPhoto() {
+    const result = await ImagePicker.launchCameraAsync({
+      allowsEditing: true,
+      quality: 0.7,
+    });
+    if (!result.canceled) {
+      const newPhoto: UserPhoto = {
+        id: String(Date.now()),
+        uri: result.assets[0].uri,
+        date: selectedDate,
+        description: "",
+      };
+      const updated = [newPhoto, ...photos];
       setPhotos(updated);
-      await AsyncStorage.setItem("@minerva:photos", JSON.stringify(updated));
-    } else {
-      const updated = notes.map((n) =>
-        n.id === selectedItem.id ? { ...n, text: currentNoteText } : n,
-      );
-      setNotes(updated);
-      await AsyncStorage.setItem("@minerva:notes", JSON.stringify(updated));
+      await AsyncStorage.setItem("@astreu:photos", JSON.stringify(updated));
     }
-    setIsEditing(false);
-    setViewModalVisible(false);
-  };
+  }
 
   return (
-    <View style={[styles.container, { paddingTop: insets.top + 10 }]}>
-      <View style={styles.topNav}>
+    <View style={[styles.container, { paddingTop: insets.top }]}>
+      <View style={styles.header}>
         <TouchableOpacity onPress={() => router.back()}>
-          <MaterialCommunityIcons name="arrow-left" size={28} color="#4CC9F0" />
+          <MaterialCommunityIcons
+            name="chevron-left"
+            size={30}
+            color="#4CC9F0"
+          />
         </TouchableOpacity>
-        <Text style={styles.navTitle}>MEU DIARIO DE BORDO ASTRONOMICO</Text>
-        <View style={{ width: 28 }} />
+        <Text style={styles.headerTitle}>LOGBOOK</Text>
+        <View style={{ width: 30 }} />
       </View>
 
-      <ScrollView
-        showsVerticalScrollIndicator={false}
-        contentContainerStyle={{ paddingBottom: 50 }}
-      >
-        {/* PERFIL USER */}
-        <View style={styles.userHeader}>
-          <View style={styles.avatar}>
-            <MaterialCommunityIcons
-              name="rocket-launch-outline"
-              size={40}
-              color="#4CC9F0"
-            />
-          </View>
-          <Text style={styles.userName}>Explorador Astronomy</Text>
-          <Text style={styles.userStats}>
-            {photos.length} Fotos • {notes.length} Notas
-          </Text>
-        </View>
+      <ScrollView showsVerticalScrollIndicator={false}>
+        <Calendar
+          theme={{
+            backgroundColor: "#05070A",
+            calendarBackground: "#11141D",
+            textSectionTitleColor: "#4CC9F0",
+            selectedDayBackgroundColor: "#4CC9F0",
+            selectedDayTextColor: "#000",
+            todayTextColor: "#4CC9F0",
+            dayTextColor: "#FFF",
+            textDisabledColor: "#333",
+            monthTextColor: "#FFF",
+            arrowColor: "#4CC9F0",
+          }}
+          onDayPress={(day) => setSelectedDate(day.dateString)}
+          markedDates={markedDates}
+          style={styles.calendar}
+        />
 
-        {/* SEÇÃO DE NOTAS */}
+        {/* Seção de Metas Corrigida */}
         <View style={styles.section}>
           <View style={styles.sectionHeader}>
-            <Text style={styles.sectionTitle}>NOTAS DE ESTUDO</Text>
+            <Text style={styles.sectionTitle}>METAS DO MÊS</Text>
             <TouchableOpacity
-              style={styles.addBtn}
-              onPress={() => {
-                setIsEditing(false);
-                setCurrentNoteText("");
-                setNoteModalVisible(true);
-              }}
+              style={styles.addBtnSmall}
+              onPress={() => setTaskModalVisible(true)}
             >
-              <MaterialCommunityIcons name="plus" size={20} color="#000" />
+              <MaterialCommunityIcons name="plus" size={18} color="#000" />
             </TouchableOpacity>
           </View>
-          {notes.map((note) => (
-            <TouchableOpacity
-              key={note.id}
-              style={styles.noteCard}
-              onPress={() => {
-                setSelectedItem(note);
-                setCurrentNoteText(note.text);
-                setIsEditing(false);
-                setViewModalVisible(true);
-              }}
-            >
-              <Text style={styles.itemDate}>{note.date}</Text>
-              <Text style={styles.itemPreview} numberOfLines={2}>
-                {note.text}
-              </Text>
-            </TouchableOpacity>
+
+          {tasks.map((task) => (
+            <View key={task.id} style={styles.taskMiniCard}>
+              <TouchableOpacity
+                onPress={() => toggleTaskStatus(task.id)}
+                style={styles.taskCheckArea}
+              >
+                <MaterialCommunityIcons
+                  name={
+                    task.status === "concluída"
+                      ? "check-circle"
+                      : "circle-outline"
+                  }
+                  size={22}
+                  color={task.status === "concluída" ? "#00C853" : "#444"}
+                />
+                <Text
+                  style={[
+                    styles.taskMiniText,
+                    task.status === "concluída" && styles.doneText,
+                  ]}
+                >
+                  {task.title}
+                </Text>
+              </TouchableOpacity>
+
+              <TouchableOpacity onPress={() => deleteTask(task.id)}>
+                <MaterialCommunityIcons
+                  name="trash-can-outline"
+                  size={18}
+                  color="#FF5252"
+                />
+              </TouchableOpacity>
+            </View>
           ))}
         </View>
 
-        {/* SEÇÃO DE FOTOS (GALERIA) */}
-        <View style={styles.section}>
-          <View style={styles.sectionHeader}>
-            <Text style={styles.sectionTitle}>MEU ESPAÇO ASTRONÔMICO</Text>
-            <TouchableOpacity style={styles.addBtn} onPress={handlePickPhoto}>
-              <MaterialCommunityIcons
-                name="camera-outline"
-                size={20}
-                color="#000"
-              />
-            </TouchableOpacity>
-          </View>
-          <View style={styles.photoGrid}>
-            {photos.map((photo) => (
+        <View style={styles.dayContainer}>
+          <Text style={styles.dateLabel}>
+            {new Date(selectedDate).toLocaleDateString("pt-BR", {
+              day: "2-digit",
+              month: "long",
+            })}
+          </Text>
+
+          <TouchableOpacity
+            style={styles.dayNoteBox}
+            onPress={() => dailyNote && setViewNoteModalVisible(true)}
+          >
+            <View style={styles.boxHeader}>
+              <Text style={styles.boxTitle}>NOTA DE ESTUDO</Text>
               <TouchableOpacity
-                key={photo.id}
-                style={styles.photoThumb}
                 onPress={() => {
-                  setSelectedItem(photo);
-                  setTempPhotoDesc(photo.description);
-                  setIsEditing(false);
-                  setViewModalVisible(true);
+                  setCurrentNoteText(dailyNote?.text || "");
+                  setNoteModalVisible(true);
                 }}
               >
-                <Image source={{ uri: photo.uri }} style={styles.imgThumb} />
-              </TouchableOpacity>
-            ))}
-          </View>
-        </View>
-      </ScrollView>
-
-      {/* --- MODAIS --- */}
-
-      {/* 1. Modal para Criar Nota */}
-      <Modal visible={noteModalVisible} animationType="slide" transparent>
-        <View style={styles.modalOverlay}>
-          <View style={styles.modalBody}>
-            <Text style={styles.modalTitle}>Nova Anotação</Text>
-            <TextInput
-              style={styles.inputArea}
-              multiline
-              placeholder="O que você aprendeu?"
-              placeholderTextColor="#555"
-              onChangeText={setCurrentNoteText}
-            />
-            <View style={styles.modalRow}>
-              <TouchableOpacity onPress={() => setNoteModalVisible(false)}>
-                <Text style={{ color: "#666" }}>Cancelar</Text>
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.primaryBtn} onPress={saveNewNote}>
-                <Text style={styles.primaryBtnText}>SALVAR</Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-        </View>
-      </Modal>
-
-      {/* 2. Modal para Descrever Foto tirada */}
-      <Modal visible={photoInputModalVisible} animationType="fade" transparent>
-        <View style={styles.modalOverlay}>
-          <View style={styles.modalBody}>
-            <Image source={{ uri: tempPhotoUri }} style={styles.previewImg} />
-            <TextInput
-              style={styles.inputArea}
-              multiline
-              placeholder="Descreva sua observação..."
-              placeholderTextColor="#555"
-              onChangeText={setTempPhotoDesc}
-            />
-            <TouchableOpacity style={styles.primaryBtn} onPress={saveNewPhoto}>
-              <Text style={styles.primaryBtnText}>REGISTRAR FOTO</Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-      </Modal>
-
-      {/* 3. Modal de Visualização / Edição / Exclusão */}
-      <Modal visible={viewModalVisible} animationType="slide" transparent>
-        <View style={styles.modalOverlay}>
-          <View style={styles.viewContainer}>
-            <View style={styles.viewHeader}>
-              <TouchableOpacity onPress={handleDelete}>
                 <MaterialCommunityIcons
-                  name="trash-can-outline"
-                  size={26}
-                  color="#FF5555"
-                />
-              </TouchableOpacity>
-              <TouchableOpacity onPress={() => setViewModalVisible(false)}>
-                <MaterialCommunityIcons
-                  name="close"
-                  size={28}
+                  name="pencil-plus"
+                  size={22}
                   color="#4CC9F0"
                 />
               </TouchableOpacity>
             </View>
+            <Text style={styles.dayText} numberOfLines={5}>
+              {dailyNote?.text || "Nenhuma anotação registrada..."}
+            </Text>
+          </TouchableOpacity>
 
-            <ScrollView>
-              {selectedItem?.uri && (
-                <Image
-                  source={{ uri: selectedItem.uri }}
-                  style={styles.fullImg}
-                  resizeMode="contain"
-                />
-              )}
-              <View style={styles.viewContent}>
-                <Text style={styles.detailDate}>{selectedItem?.date}</Text>
-                {isEditing ? (
-                  <TextInput
-                    style={styles.editArea}
-                    multiline
-                    value={selectedItem?.uri ? tempPhotoDesc : currentNoteText}
-                    onChangeText={
-                      selectedItem?.uri ? setTempPhotoDesc : setCurrentNoteText
-                    }
-                  />
-                ) : (
-                  <Text style={styles.detailText}>
-                    {selectedItem?.uri
-                      ? selectedItem.description
-                      : selectedItem?.text}
-                  </Text>
-                )}
-
-                <TouchableOpacity
-                  style={styles.editBtn}
-                  onPress={isEditing ? handleUpdate : () => setIsEditing(true)}
-                >
-                  <MaterialCommunityIcons
-                    name={isEditing ? "check" : "pencil"}
-                    size={20}
-                    color="#000"
-                  />
-                  <Text style={styles.editBtnText}>
-                    {isEditing ? "CONFIRMAR" : "EDITAR"}
-                  </Text>
-                </TouchableOpacity>
-              </View>
+          <View style={styles.photoSection}>
+            <View style={styles.boxHeader}>
+              <Text style={styles.boxTitle}>ESPAÇO ASTRONÔMICO</Text>
+              <TouchableOpacity
+                onPress={handlePickPhoto}
+                style={styles.cameraBtn}
+              >
+                <MaterialCommunityIcons name="camera" size={20} color="#000" />
+              </TouchableOpacity>
+            </View>
+            <ScrollView
+              horizontal
+              showsHorizontalScrollIndicator={false}
+              style={{ marginTop: 10 }}
+            >
+              {dailyPhotos.map((p) => (
+                <View key={p.id} style={styles.photoWrapper}>
+                  <Image source={{ uri: p.uri }} style={styles.dailyImg} />
+                </View>
+              ))}
             </ScrollView>
+          </View>
+        </View>
+      </ScrollView>
+
+      {/* NOVO MODAL PARA ADICIONAR METAS */}
+      <Modal visible={taskModalVisible} transparent animationType="fade">
+        <KeyboardAvoidingView
+          behavior={Platform.OS === "ios" ? "padding" : "height"}
+          style={styles.modalOverlay}
+        >
+          <View style={styles.modalContent}>
+            <View style={styles.modalHeader}>
+              <Text style={styles.modalTitle}>Nova Meta</Text>
+              <TouchableOpacity onPress={() => setTaskModalVisible(false)}>
+                <MaterialCommunityIcons name="close" size={24} color="#666" />
+              </TouchableOpacity>
+            </View>
+            <TextInput
+              style={styles.input}
+              placeholder="Ex: Estudar Constelações..."
+              placeholderTextColor="#444"
+              value={currentTaskTitle}
+              onChangeText={setCurrentTaskTitle}
+              autoFocus
+            />
+            <TouchableOpacity style={styles.saveBtn} onPress={saveNewTask}>
+              <Text style={styles.saveBtnText}>ADICIONAR META</Text>
+            </TouchableOpacity>
+          </View>
+        </KeyboardAvoidingView>
+      </Modal>
+
+      {/* MODAL DE NOTA (RESPONSIVO) */}
+      <Modal visible={noteModalVisible} transparent animationType="slide">
+        <KeyboardAvoidingView
+          behavior={Platform.OS === "ios" ? "padding" : "height"}
+          style={styles.modalOverlay}
+        >
+          <View style={styles.modalContent}>
+            <View style={styles.modalHeader}>
+              <Text style={styles.modalTitle}>Anotação do Dia</Text>
+              <TouchableOpacity onPress={() => setNoteModalVisible(false)}>
+                <MaterialCommunityIcons name="close" size={24} color="#666" />
+              </TouchableOpacity>
+            </View>
+            <ScrollView style={{ maxHeight: SCREEN_HEIGHT * 0.3 }}>
+              <TextInput
+                style={styles.input}
+                multiline
+                value={currentNoteText}
+                onChangeText={setCurrentNoteText}
+                placeholder="Relate seus avanços..."
+                placeholderTextColor="#444"
+              />
+            </ScrollView>
+            <TouchableOpacity style={styles.saveBtn} onPress={saveNote}>
+              <Text style={styles.saveBtnText}>REGISTRAR LOG</Text>
+            </TouchableOpacity>
+          </View>
+        </KeyboardAvoidingView>
+      </Modal>
+
+      {/* MODAL DE VISUALIZAÇÃO */}
+      <Modal visible={viewNoteModalVisible} transparent animationType="fade">
+        <View style={styles.modalOverlayCenter}>
+          <View style={styles.modalContentLarge}>
+            <View style={styles.modalHeader}>
+              <Text style={styles.modalTitle}>Exploração Detalhada</Text>
+              <TouchableOpacity onPress={() => setViewNoteModalVisible(false)}>
+                <MaterialCommunityIcons
+                  name="close"
+                  size={24}
+                  color="#4CC9F0"
+                />
+              </TouchableOpacity>
+            </View>
+            <ScrollView>
+              <Text style={styles.fullNoteText}>{dailyNote?.text}</Text>
+            </ScrollView>
+            <TouchableOpacity
+              style={styles.editNoteFloatingBtn}
+              onPress={() => {
+                setViewNoteModalVisible(false);
+                setNoteModalVisible(true);
+              }}
+            >
+              <MaterialCommunityIcons name="pencil" size={20} color="#000" />
+              <Text style={{ fontWeight: "bold", marginLeft: 5 }}>EDITAR</Text>
+            </TouchableOpacity>
           </View>
         </View>
       </Modal>
@@ -375,144 +436,142 @@ export default function ProfileScreen() {
 
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: "#05070A" },
-  topNav: {
+  header: {
     flexDirection: "row",
     justifyContent: "space-between",
-    paddingHorizontal: 20,
     alignItems: "center",
-    marginBottom: 20,
+    padding: 20,
   },
-  navTitle: {
+  headerTitle: {
     color: "#FFF",
+    letterSpacing: 3,
     fontWeight: "bold",
-    fontSize: 12,
-    letterSpacing: 2,
+    fontSize: 14,
   },
-  userHeader: { alignItems: "center", marginBottom: 30 },
-  avatar: {
-    width: 80,
-    height: 80,
-    borderRadius: 40,
-    backgroundColor: "#11141D",
-    justifyContent: "center",
-    alignItems: "center",
-    borderWidth: 1,
-    borderColor: "#4CC9F0",
+  calendar: {
+    borderRadius: 20,
+    marginHorizontal: 20,
     marginBottom: 10,
+    overflow: "hidden",
   },
-  userName: { color: "#FFF", fontSize: 22, fontWeight: "bold" },
-  userStats: { color: "#4CC9F0", fontSize: 12, marginTop: 5 },
-
-  section: { paddingHorizontal: 20, marginTop: 20 },
+  section: { paddingHorizontal: 20, marginBottom: 20 },
   sectionHeader: {
     flexDirection: "row",
     justifyContent: "space-between",
-    alignItems: "center",
     marginBottom: 15,
   },
   sectionTitle: {
     color: "#4CC9F0",
-    fontSize: 12,
-    fontWeight: "bold",
-    letterSpacing: 1.5,
-  },
-  addBtn: { backgroundColor: "#4CC9F0", padding: 8, borderRadius: 8 },
-
-  noteCard: {
-    backgroundColor: "#11141D",
-    padding: 15,
-    borderRadius: 15,
-    marginBottom: 10,
-    borderLeftWidth: 4,
-    borderLeftColor: "#4CC9F0",
-  },
-  itemDate: {
-    color: "#4CC9F0",
     fontSize: 10,
+    letterSpacing: 2,
     fontWeight: "bold",
-    marginBottom: 5,
   },
-  itemPreview: { color: "#BBB", fontSize: 14 },
-
-  photoGrid: { flexDirection: "row", flexWrap: "wrap", gap: 10 },
-  photoThumb: {
-    width: "31%",
-    aspectRatio: 1,
-    borderRadius: 10,
-    overflow: "hidden",
+  addBtnSmall: { backgroundColor: "#4CC9F0", padding: 4, borderRadius: 6 },
+  taskMiniCard: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    backgroundColor: "#11141D",
+    padding: 12,
+    borderRadius: 12,
+    marginBottom: 8,
   },
-  imgThumb: { width: "100%", height: "100%" },
-
-  modalOverlay: {
-    flex: 1,
-    backgroundColor: "rgba(0,0,0,0.95)",
-    justifyContent: "center",
+  taskCheckArea: { flexDirection: "row", alignItems: "center", flex: 1 },
+  taskMiniText: { color: "#FFF", marginLeft: 10, fontSize: 13 },
+  doneText: { textDecorationLine: "line-through", color: "#444" },
+  dayContainer: {
     padding: 20,
+    backgroundColor: "#11141D",
+    borderTopLeftRadius: 30,
+    borderTopRightRadius: 30,
+    flex: 1,
   },
-  modalBody: { backgroundColor: "#11141D", padding: 20, borderRadius: 20 },
-  modalTitle: {
-    color: "#FFF",
+  dateLabel: {
+    color: "#4CC9F0",
     fontSize: 18,
     fontWeight: "bold",
-    marginBottom: 15,
+    marginBottom: 20,
+    textTransform: "capitalize",
   },
-  inputArea: {
+  dayNoteBox: {
     backgroundColor: "#05070A",
-    color: "#FFF",
-    padding: 15,
-    borderRadius: 12,
+    padding: 18,
+    borderRadius: 20,
+    marginBottom: 25,
     minHeight: 120,
-    textAlignVertical: "top",
   },
-  modalRow: {
+  boxHeader: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    marginTop: 15,
+    marginBottom: 12,
   },
-  primaryBtn: {
-    backgroundColor: "#4CC9F0",
-    paddingVertical: 12,
-    paddingHorizontal: 25,
-    borderRadius: 10,
+  boxTitle: {
+    color: "#4CC9F0",
+    fontSize: 10,
+    fontWeight: "bold",
+    opacity: 0.7,
   },
-  primaryBtnText: { color: "#000", fontWeight: "bold" },
-  previewImg: {
-    width: "100%",
-    height: 200,
-    borderRadius: 15,
-    marginBottom: 15,
+  dayText: { color: "#BBB", lineHeight: 22, fontSize: 15 },
+  photoSection: { marginBottom: 20 },
+  cameraBtn: { backgroundColor: "#4CC9F0", padding: 6, borderRadius: 8 },
+  photoWrapper: { marginRight: 12 },
+  dailyImg: { width: 100, height: 100, borderRadius: 15 },
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: "rgba(0,0,0,0.85)",
+    justifyContent: "flex-end",
   },
-
-  viewContainer: { flex: 1, marginTop: 40 },
-  viewHeader: {
+  modalOverlayCenter: {
+    flex: 1,
+    backgroundColor: "rgba(0,0,0,0.9)",
+    justifyContent: "center",
+    padding: 20,
+  },
+  modalContent: {
+    backgroundColor: "#11141D",
+    borderTopLeftRadius: 30,
+    borderTopRightRadius: 30,
+    padding: 25,
+  },
+  modalContentLarge: {
+    backgroundColor: "#11141D",
+    borderRadius: 30,
+    padding: 25,
+    maxHeight: "80%",
+  },
+  modalHeader: {
     flexDirection: "row",
     justifyContent: "space-between",
-    paddingHorizontal: 10,
+    alignItems: "center",
     marginBottom: 20,
   },
-  fullImg: { width: "100%", height: 350, borderRadius: 20 },
-  viewContent: { padding: 20 },
-  detailDate: { color: "#4CC9F0", fontSize: 12, fontWeight: "bold" },
-  detailText: { color: "#BBB", fontSize: 16, lineHeight: 26, marginTop: 15 },
-  editArea: {
-    backgroundColor: "#11141D",
+  modalTitle: { color: "#FFF", fontSize: 18, fontWeight: "bold" },
+  input: {
     color: "#FFF",
-    padding: 15,
-    borderRadius: 12,
-    marginTop: 15,
     fontSize: 16,
-    borderWidth: 1,
-    borderColor: "#4CC9F0",
+    backgroundColor: "#05070A",
+    borderRadius: 15,
+    padding: 15,
+    textAlignVertical: "top",
+    marginBottom: 15,
   },
-  editBtn: {
+  saveBtn: {
+    backgroundColor: "#4CC9F0",
+    padding: 16,
+    borderRadius: 15,
+    alignItems: "center",
+    marginBottom: 20,
+  },
+  saveBtnText: { fontWeight: "bold", color: "#000" },
+  fullNoteText: { color: "#FFF", fontSize: 16, lineHeight: 26 },
+  editNoteFloatingBtn: {
     backgroundColor: "#4CC9F0",
     flexDirection: "row",
-    padding: 15,
-    borderRadius: 12,
-    marginTop: 30,
-    justifyContent: "center",
-    gap: 10,
+    padding: 12,
+    borderRadius: 20,
+    alignSelf: "center",
+    marginTop: 20,
+    alignItems: "center",
   },
-  editBtnText: { color: "#000", fontWeight: "bold" },
 });
