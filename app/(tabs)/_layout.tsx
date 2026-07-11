@@ -5,7 +5,7 @@ import React from "react";
 export default function TabLayout() {
   return (
     <Tabs
-      initialRouteName="community"
+      initialRouteName="LoginScreen" // Agora ele vai encontrar o arquivo abaixo
       screenOptions={{
         tabBarActiveTintColor: "#4CC9F0",
         tabBarInactiveTintColor: "#555",
@@ -19,11 +19,19 @@ export default function TabLayout() {
         headerShown: false,
       }}
     >
-      {/* 1. Community - AGORA ESPAÇO COMPARTILHADO */}
+      {/* TELA DE LOGIN - Escondida da barra inferior */}
+      <Tabs.Screen
+        name="LoginScreen"
+        options={{
+          href: null, // Remove o ícone da barra
+          tabBarStyle: { display: "none" }, // Esconde a barra totalmente nesta tela
+        }}
+      />
+
+      {/* 1. Espaço Compartilhado */}
       <Tabs.Screen
         name="community"
         options={{
-          // Mudando o nome e adicionando o emoji de foguete no texto
           title: "Espaço Compartilhado 🚀",
           tabBarIcon: ({ color }) => (
             <MaterialCommunityIcons name="rocket" size={26} color={color} />
@@ -57,7 +65,7 @@ export default function TabLayout() {
         }}
       />
 
-      {/* 4. Foto do Dia */}
+      {/* 4. Foto do Dia (index) */}
       <Tabs.Screen
         name="index"
         options={{
@@ -72,10 +80,12 @@ export default function TabLayout() {
         }}
       />
 
-      {/* --- TELAS OCULTAS --- */}
+      {/* TELAS OCULTAS */}
       <Tabs.Screen name="exoplanet" options={{ href: null }} />
       <Tabs.Screen name="stars" options={{ href: null }} />
       <Tabs.Screen name="profile" options={{ href: null }} />
+      <Tabs.Screen name="gallerytab" options={{ href: null }} />
+      <Tabs.Screen name="create-post" options={{ href: null }} />
     </Tabs>
   );
 }
