@@ -1,4 +1,5 @@
 import { Module } from "@nestjs/common";
+import { ConfigModule } from "@nestjs/config"; // <-- 1. Importação do ConfigModule adicionada
 import { TypeOrmModule } from "@nestjs/typeorm";
 
 // Módulos
@@ -6,6 +7,7 @@ import { DiarioModule } from "./diario/diario.module";
 import { PostsModule } from "./posts/posts.module";
 import { UsersModule } from "./users/users.module";
 
+import { AiModule } from "./ai/ai.module";
 import { AuthModule } from "./auth/auth.module";
 import { DiarioBordo } from "./diario/entities/diario.entity"; // O CLI gera como diario.entity.ts
 import { Meta } from "./diario/entities/meta.entity";
@@ -16,6 +18,10 @@ import { User } from "./users/entities/user.entity";
 
 @Module({
   imports: [
+    // 2. O ConfigModule deve ser o PRIMEIRO item para carregar o .env antes de tudo
+    ConfigModule.forRoot({
+      isGlobal: true,
+    }),
     TypeOrmModule.forRoot({
       type: "mysql",
       host: "localhost",
@@ -32,6 +38,7 @@ import { User } from "./users/entities/user.entity";
     PostsModule,
     DiarioModule,
     AuthModule,
+    AiModule,
   ],
 })
 export class AppModule {}

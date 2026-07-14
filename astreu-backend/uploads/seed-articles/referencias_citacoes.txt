@@ -1,0 +1,219 @@
+==================================================
+   REFERÊNCIAS E CITAÇÕES - ASTREU HUB (TCC)
+==================================================
+
+CATEGORIA: CONSTELLATION
+TÍTULO: Compton reflection and iron fluorescence in AGN and GBHCs
+AUTORES: C. S. Reynolds
+ARQUIVO: Compton_reflection_and_iron_fluorescence_in_AGN_and_GBHCs.pdf
+LINK ORIGINAL: http://arxiv.org/abs/astro-ph/9810018v1
+--------------------------------------------------
+
+CATEGORIA: CONSTELLATION
+TÍTULO: Star Formation in the Rosette Complex
+AUTORES: Carlos G. Román-Zúñiga, Elizabeth A. Lada
+ARQUIVO: Star_Formation_in_the_Rosette_Complex.pdf
+LINK ORIGINAL: http://arxiv.org/abs/0810.0931v1
+--------------------------------------------------
+
+CATEGORIA: CONSTELLATION
+TÍTULO: The Future of Fe-K Line Diagnostics for Probing Strong Gravity
+AUTORES: T. Yaqoob
+ARQUIVO: The_Future_of_Fe-K_Line_Diagnostics_for_Probing_Strong_Gravity.pdf
+LINK ORIGINAL: http://arxiv.org/abs/astro-ph/0108032v1
+--------------------------------------------------
+
+CATEGORIA: CONSTELLATION
+TÍTULO: NASA's Future Missions in X-ray Astronomy
+AUTORES: Nicholas E. White
+ARQUIVO: NASAs_Future_Missions_in_X-ray_Astronomy.pdf
+LINK ORIGINAL: http://arxiv.org/abs/astro-ph/0202356v1
+--------------------------------------------------
+
+CATEGORIA: CONSTELLATION
+TÍTULO: Lost Baryons at Low Redshift
+AUTORES: Smita Mathur, Fabrizio Nicastro, Rik J. Williams
+ARQUIVO: Lost_Baryons_at_Low_Redshift.pdf
+LINK ORIGINAL: http://arxiv.org/abs/0708.1761v1
+--------------------------------------------------
+
+CATEGORIA: COSMOS SPACE
+TÍTULO: An overview of Cosmology
+AUTORES: Julien Lesgourgues
+ARQUIVO: An_overview_of_Cosmology.pdf
+LINK ORIGINAL: http://arxiv.org/abs/astro-ph/0409426v1
+--------------------------------------------------
+
+CATEGORIA: COSMOS SPACE
+TÍTULO: Minkowski Functionals in Cosmology: An Overview
+AUTORES: Jens Schmalzing
+ARQUIVO: Minkowski_Functionals_in_Cosmology_An_Overview.pdf
+LINK ORIGINAL: http://arxiv.org/abs/astro-ph/9710302v1
+--------------------------------------------------
+
+CATEGORIA: COSMOS SPACE
+TÍTULO: Topics in Cosmology
+AUTORES: Robert Brandenberger
+ARQUIVO: Topics_in_Cosmology.pdf
+LINK ORIGINAL: http://arxiv.org/abs/hep-th/0701157v1
+--------------------------------------------------
+
+CATEGORIA: COSMOS SPACE
+TÍTULO: Introductory Overview of Modern Cosmology
+AUTORES: Burin Gumjudpai
+ARQUIVO: Introductory_Overview_of_Modern_Cosmology.pdf
+LINK ORIGINAL: http://arxiv.org/abs/astro-ph/0305063v2
+--------------------------------------------------
+
+CATEGORIA: COSMOS SPACE
+TÍTULO: A brief introduction to cosmic topology
+AUTORES: M. J. Reboucas
+ARQUIVO: A_brief_introduction_to_cosmic_topology.pdf
+LINK ORIGINAL: http://arxiv.org/abs/astro-ph/0504365v1
+--------------------------------------------------
+
+CATEGORIA: GALAXIES
+TÍTULO: Dynamical Constraints on Disk Galaxy Formation
+AUTORES: Stacy McGaugh
+ARQUIVO: Dynamical_Constraints_on_Disk_Galaxy_Formation.pdf
+LINK ORIGINAL: http://arxiv.org/abs/astro-ph/9909452v1
+--------------------------------------------------
+
+CATEGORIA: GALAXIES
+TÍTULO: How Galaxies Don't Form
+AUTORES: Stacy McGaugh
+ARQUIVO: How_Galaxies_Dont_Form.pdf
+LINK ORIGINAL: http://arxiv.org/abs/astro-ph/9812327v1
+--------------------------------------------------
+
+CATEGORIA: GALAXIES
+TÍTULO: Globular Cluster Systems of Elliptical Galaxies
+AUTORES: Stephen E. Zepf, Keith M. Ashman
+ARQUIVO: Globular_Cluster_Systems_of_Elliptical_Galaxies.pdf
+LINK ORIGINAL: http://arxiv.org/abs/astro-ph/9712206v1
+--------------------------------------------------
+
+CATEGORIA: GALAXIES
+TÍTULO: Galaxy Mergers and Interactions at High Redshift
+AUTORES: Christopher J. Conselice
+ARQUIVO: Galaxy_Mergers_and_Interactions_at_High_Redshift.pdf
+LINK ORIGINAL: http://arxiv.org/abs/astro-ph/0610662v2
+--------------------------------------------------
+
+CATEGORIA: GALAXIES
+TÍTULO: Distant early-type galaxies: tracers of the galaxy mass assembly evolution
+AUTORES: Andrea Cimatti
+ARQUIVO: Distant_early-type_galaxies_tracers_of_the_galaxy_mass_assembly_evolution.pdf
+LINK ORIGINAL: http://arxiv.org/abs/astro-ph/0601497v2
+--------------------------------------------------
+
+CATEGORIA: NEBULA
+TÍTULO: Planetary Nebulae in the Magellanic Clouds: Probing Stellar Evolution and Populations
+AUTORES: Letizia Stanghellini
+ARQUIVO: Planetary_Nebulae_in_the_Magellanic_Clouds_Probing_Stellar_Evolution_and_Populations.pdf
+LINK ORIGINAL: http://arxiv.org/abs/astro-ph/0202240v1
+--------------------------------------------------
+
+CATEGORIA: NEBULA
+TÍTULO: MHD Models of Planetary Nebulae: Review
+AUTORES: Guillermo García-Segura
+ARQUIVO: MHD_Models_of_Planetary_Nebulae_Review.pdf
+LINK ORIGINAL: http://arxiv.org/abs/astro-ph/0202041v1
+--------------------------------------------------
+
+CATEGORIA: NEBULA
+TÍTULO: Intracluster Planetary Nebulae
+AUTORES: John J. Feldmeier
+ARQUIVO: Intracluster_Planetary_Nebulae.pdf
+LINK ORIGINAL: http://arxiv.org/abs/astro-ph/0606173v1
+--------------------------------------------------
+
+CATEGORIA: NEBULA
+TÍTULO: Plerions and pulsar-powered nebulae
+AUTORES: Bryan Gaensler
+ARQUIVO: Plerions_and_pulsar-powered_nebulae.pdf
+LINK ORIGINAL: http://arxiv.org/abs/astro-ph/0012362v1
+--------------------------------------------------
+
+CATEGORIA: NEBULA
+TÍTULO: Spitzer's View of Planetary Nebulae
+AUTORES: Joseph L. Hora
+ARQUIVO: Spitzers_View_of_Planetary_Nebulae.pdf
+LINK ORIGINAL: http://arxiv.org/abs/0708.4175v1
+--------------------------------------------------
+
+CATEGORIA: PLANETS
+TÍTULO: Emergent Exoplanet Flux: Review of the Spitzer Results
+AUTORES: Drake Deming
+ARQUIVO: Emergent_Exoplanet_Flux_Review_of_the_Spitzer_Results.pdf
+LINK ORIGINAL: http://arxiv.org/abs/0808.1289v1
+--------------------------------------------------
+
+CATEGORIA: PLANETS
+TÍTULO: The Chemical Compositions of Stars with Planets: A Review
+AUTORES: Guillermo Gonzalez
+ARQUIVO: The_Chemical_Compositions_of_Stars_with_Planets_A_Review.pdf
+LINK ORIGINAL: http://arxiv.org/abs/astro-ph/0609829v1
+--------------------------------------------------
+
+CATEGORIA: PLANETS
+TÍTULO: Transiting Exoplanets with JWST
+AUTORES: S. Seager, D. Deming, J. A. Valenti
+ARQUIVO: Transiting_Exoplanets_with_JWST.pdf
+LINK ORIGINAL: http://arxiv.org/abs/0808.1913v1
+--------------------------------------------------
+
+CATEGORIA: PLANETS
+TÍTULO: Review on low-mass stars and brown dwarfs
+AUTORES: G. Chabrier, I. Baraffe, F. Allard, P. H. Hauschildt
+ARQUIVO: Review_on_low-mass_stars_and_brown_dwarfs.pdf
+LINK ORIGINAL: http://arxiv.org/abs/astro-ph/0509798v1
+--------------------------------------------------
+
+CATEGORIA: PLANETS
+TÍTULO: Abundances in stars with exoplanets
+AUTORES: Garik Israelian
+ARQUIVO: Abundances_in_stars_with_exoplanets.pdf
+LINK ORIGINAL: http://arxiv.org/abs/astro-ph/0310377v1
+--------------------------------------------------
+
+CATEGORIA: STARS
+TÍTULO: X-rays of Stellar Coronae with Chandra and XMM-Newton: Flares and Elemental Composition in Stellar Atmospheres (Invited review)
+AUTORES: Marc Audard
+ARQUIVO: X-rays_of_Stellar_Coronae_with_Chandra_and_XMM-Newton_Flares_and_Elemental_Composition_in_Stellar_Atmospheres_Invited_re.pdf
+LINK ORIGINAL: http://arxiv.org/abs/astro-ph/0409519v1
+--------------------------------------------------
+
+CATEGORIA: STARS
+TÍTULO: Stellar Evolutionary Models: challenges from observations of stellar systems
+AUTORES: S. Cassisi
+ARQUIVO: Stellar_Evolutionary_Models_challenges_from_observations_of_stellar_systems.pdf
+LINK ORIGINAL: http://arxiv.org/abs/astro-ph/0701678v1
+--------------------------------------------------
+
+CATEGORIA: STARS
+TÍTULO: Stellar evolutionary models: uncertainties and systematics
+AUTORES: S. Cassisi
+ARQUIVO: Stellar_evolutionary_models_uncertainties_and_systematics.pdf
+LINK ORIGINAL: http://arxiv.org/abs/astro-ph/0506161v1
+--------------------------------------------------
+
+CATEGORIA: STARS
+TÍTULO: Review on low-mass stars and brown dwarfs
+AUTORES: G. Chabrier, I. Baraffe, F. Allard, P. H. Hauschildt
+ARQUIVO: Review_on_low-mass_stars_and_brown_dwarfs.pdf
+LINK ORIGINAL: http://arxiv.org/abs/astro-ph/0509798v1
+--------------------------------------------------
+
+CATEGORIA: STARS
+TÍTULO: Radiative Accelerations in Stellar Evolution
+AUTORES: G. Michaud, J. Richer
+ARQUIVO: Radiative_Accelerations_in_Stellar_Evolution.pdf
+LINK ORIGINAL: http://arxiv.org/abs/0801.4055v1
+--------------------------------------------------
+BASE 
+
+https://www.inpe.br/ciaa2018/arquivos/pdfs/apostila_completa_2018.pdf
+TÍTULO : INTRODUÇÃO À ASTRONOMIA E ASTROFISÍCA
+AUTORES :Carlos Alexandre Wuensche,André de Castro Milone,Cláudia Vilega Rodrigues,Flávio D’Amico,Francisco José Jablonski,Hugo Vicente Capelato,João Braga,José Roberto Cecatto,José Williams Vilas Boas
+Odylio Denys de Aguiar,Oswaldo Duarte Miranda
