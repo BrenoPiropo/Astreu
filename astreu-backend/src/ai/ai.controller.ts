@@ -1,4 +1,4 @@
-import { Controller, Post } from "@nestjs/common";
+import { Controller, Get, Post, Query } from "@nestjs/common";
 import { AiService } from "./ai.service";
 
 @Controller("ai")
@@ -15,5 +15,11 @@ export class AiController {
       message:
         "🚀 Ingestão iniciada em segundo plano! Acompanhe o progresso pelo terminal do NestJS.",
     };
+  }
+  @Get("ask")
+  async ask(@Query("q") q: string) {
+    if (!q)
+      return { error: "Por favor, envie uma pergunta via query param ?q=" };
+    return await this.aiService.ask(q);
   }
 }
