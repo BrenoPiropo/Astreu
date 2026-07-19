@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Query } from "@nestjs/common";
+import { Body, Controller, Get, Param, Post, Query } from "@nestjs/common";
 import { AiService } from "./ai.service";
 
 @Controller("ai")
@@ -7,19 +7,44 @@ export class AiController {
 
   @Post("seed")
   seedDatabase() {
-    // 💡 REMOVEMOS O AWAIT!
-    // Assim o processo roda no fundo sem fazer o Insomnia dar Timeout de 30 segundos.
     this.aiService.seedDatabase();
-
     return {
       message:
-        "🚀 Ingestão iniciada em segundo plano! Acompanhe o progresso pelo terminal do NestJS.",
+        "🚀 Ingestão iniciada em segundo plano! Acompanhe o progresso pelo terminal.",
     };
   }
-  @Get("ask")
-  async ask(@Query("q") q: string) {
-    if (!q)
-      return { error: "Por favor, envie uma pergunta via query param ?q=" };
-    return await this.aiService.ask(q);
+
+  @Post("ask")
+  async ask(
+    @Body() body: { query: string; sessionId?: string; userId: number },
+  ) {
+    if (!body.query || !body.userId) {
+      return { error: "Pergunta e ID do usuário são obrigatórios." };
+    }
+
+    const result = await this.aiService.askWithMemory(
+      body.query,
+      body.sessionId || `default-${body.userId}`,
+      body.userId,
+    );
+
+    return { answer: result.resposta };
+  }
+
+  // 💡 Agora recebe o userId pela URL (?userId=1)
+  @Get("sessions")
+  getSessions(@Query("userId") userId: string) {
+    if (!userId) return [];
+    return this.aiService.getAllSessions(Number(userId));
+  }
+
+  // 💡 Agora exigimos o userId na URL para provar quem está pedindo o histórico
+  @Get("history/:sessionId")
+  getHistory(
+    @Param("sessionId") sessionId: string,
+    @Query("userId") userId: string,
+  ) {
+    if (!userId) return [];
+    return this.aiService.getHistory(sessionId, Number(userId));
   }
 }

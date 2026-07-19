@@ -66,13 +66,6 @@ export default function ApodScreen() {
 
       {/* HEADER: HAMBURGUER NA ESQUERDA */}
       <View style={styles.header}>
-        <TouchableOpacity
-          style={styles.menuButton}
-          onPress={() => setMenuVisible(true)}
-        >
-          <MaterialCommunityIcons name="menu" size={32} color="#4CC9F0" />
-        </TouchableOpacity>
-
         <View style={styles.headerTitleContainer}>
           <Text style={styles.headerSubtitle}>EXPLORAÇÃO ESPACIAL</Text>
           <Text style={styles.headerTitle}>Foto do Dia</Text>
@@ -127,83 +120,6 @@ export default function ApodScreen() {
           </TouchableOpacity>
         </View>
       </ScrollView>
-
-      {/* MODAL MENU LATERAL ESQUERDO */}
-      <Modal
-        animationType="fade"
-        transparent={true}
-        visible={menuVisible}
-        onRequestClose={() => setMenuVisible(false)}
-      >
-        <View style={styles.drawerOverlay}>
-          <View style={[styles.drawerContent, { paddingTop: insets.top + 20 }]}>
-            {/* PERFIL E BOTÃO MEU ESPAÇO */}
-            <View style={styles.profileSection}>
-              <View style={styles.profileImageContainer}>
-                <Image
-                  source={{ uri: "https://github.com/BrenoPiropo.png" }}
-                  style={styles.profileImage}
-                />
-              </View>
-              <Text style={styles.welcomeText}>Olá,</Text>
-              <Text style={styles.userNameText}>Breno Piropo</Text>
-
-              <TouchableOpacity
-                style={styles.userButtonMenu}
-                onPress={() => navigateTo("/profile")}
-              >
-                <MaterialCommunityIcons
-                  name="account-star"
-                  size={18}
-                  color="#000"
-                />
-                <Text style={styles.userButtonText}>
-                  Meu Diario Astronomico
-                </Text>
-              </TouchableOpacity>
-            </View>
-
-            <View style={styles.drawerDivider} />
-
-            <Text style={styles.drawerSectionLabel}>EXPLORAR</Text>
-
-            <TouchableOpacity
-              style={styles.drawerItem}
-              onPress={() => navigateTo("/exoplanet")}
-            >
-              <MaterialCommunityIcons name="earth" size={24} color="#4CC9F0" />
-              <Text style={styles.drawerItemText}>Exoplanetas</Text>
-            </TouchableOpacity>
-
-            <TouchableOpacity
-              style={styles.drawerItem}
-              onPress={() => navigateTo("/stars")}
-            >
-              <MaterialCommunityIcons
-                name="star-shooting"
-                size={24}
-                color="#4CC9F0"
-              />
-              <Text style={styles.drawerItemText}>Estrelas</Text>
-            </TouchableOpacity>
-
-            {/* BOTÃO SAIR NO FINAL */}
-            <TouchableOpacity
-              style={styles.logoutBtn}
-              onPress={() => setMenuVisible(false)}
-            >
-              <MaterialCommunityIcons name="logout" size={22} color="#FF4D4D" />
-              <Text style={styles.logoutText}>Sair da Conta</Text>
-            </TouchableOpacity>
-          </View>
-
-          {/* Área de toque para fechar (agora na direita) */}
-          <TouchableOpacity
-            style={styles.drawerCloseArea}
-            onPress={() => setMenuVisible(false)}
-          />
-        </View>
-      </Modal>
 
       {/* MODAL DE DETALHES */}
       <Modal animationType="slide" transparent={true} visible={modalVisible}>

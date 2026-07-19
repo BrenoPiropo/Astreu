@@ -1,3 +1,4 @@
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 import { useRouter } from "expo-router";
 import React, { useState } from "react";
@@ -12,7 +13,6 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function LoginScreen() {
   const [email, setEmail] = useState("");
@@ -38,7 +38,10 @@ export default function LoginScreen() {
 
       if (response.data) {
         console.log("Login bem-sucedido:", response.data.nome);
-        await AsyncStorage.setItem('@astreuhub_user', JSON.stringify(response.data));
+        await AsyncStorage.setItem(
+          "@astreuhub_user",
+          JSON.stringify(response.data),
+        );
         // Redireciona para a tela principal (index) e limpa o histórico de navegação
         router.replace("/community");
       }
@@ -102,7 +105,7 @@ export default function LoginScreen() {
             {loading ? (
               <ActivityIndicator color="#05070A" />
             ) : (
-              <Text style={styles.buttonText}>DECOLAR 🚀</Text>
+              <Text style={styles.buttonText}>Entrar</Text>
             )}
           </TouchableOpacity>
         </View>

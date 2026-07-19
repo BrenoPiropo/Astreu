@@ -1,5 +1,5 @@
 ==================================================
-   REFERÊNCIAS E CITAÇÕES - ASTREU HUB (TCC)
+    REFERÊNCIAS E CITAÇÕES - ASTREU HUB (TCC)
 ==================================================
 
 CATEGORIA: CONSTELLATION
@@ -37,6 +37,20 @@ ARQUIVO: Lost_Baryons_at_Low_Redshift.pdf
 LINK ORIGINAL: http://arxiv.org/abs/0708.1761v1
 --------------------------------------------------
 
+CATEGORIA: CONSTELLATION
+TÍTULO: Observing the effects of strong gravity with future X-ray missions
+AUTORES: C. S. Reynolds
+ARQUIVO: Observing_the_effects_of_strong_gravity_with_future_X-ray_missions.pdf
+LINK ORIGINAL: http://arxiv.org/abs/astro-ph/0001324v1
+--------------------------------------------------
+
+CATEGORIA: CONSTELLATION
+TÍTULO: Numerical simulations of the Warm-Hot Intergalactic Medium
+AUTORES: S. Bertone, J. Schaye, K. Dolag
+ARQUIVO: Numerical_simulations_of_the_Warm-Hot_Intergalactic_Medium.pdf
+LINK ORIGINAL: http://arxiv.org/abs/0801.1039v1
+--------------------------------------------------
+
 CATEGORIA: COSMOS SPACE
 TÍTULO: An overview of Cosmology
 AUTORES: Julien Lesgourgues
@@ -70,6 +84,20 @@ TÍTULO: A brief introduction to cosmic topology
 AUTORES: M. J. Reboucas
 ARQUIVO: A_brief_introduction_to_cosmic_topology.pdf
 LINK ORIGINAL: http://arxiv.org/abs/astro-ph/0504365v1
+--------------------------------------------------
+
+CATEGORIA: COSMOS SPACE
+TÍTULO: Cosmic defects and cosmology
+AUTORES: Joao Magueijo, Robert Brandenberger
+ARQUIVO: Cosmic_defects_and_cosmology.pdf
+LINK ORIGINAL: http://arxiv.org/abs/astro-ph/0002030v1
+--------------------------------------------------
+
+CATEGORIA: COSMOS SPACE
+TÍTULO: The Cosmological Constant
+AUTORES: Sean M. Carroll
+ARQUIVO: The_Cosmological_Constant.pdf
+LINK ORIGINAL: http://arxiv.org/abs/astro-ph/0004075v2
 --------------------------------------------------
 
 CATEGORIA: GALAXIES
@@ -107,6 +135,20 @@ ARQUIVO: Distant_early-type_galaxies_tracers_of_the_galaxy_mass_assembly_evoluti
 LINK ORIGINAL: http://arxiv.org/abs/astro-ph/0601497v2
 --------------------------------------------------
 
+CATEGORIA: GALAXIES
+TÍTULO: Galaxy Interactions
+AUTORES: Joshua E. Barnes
+ARQUIVO: Galaxy_Interactions.pdf
+LINK ORIGINAL: http://arxiv.org/abs/astro-ph/9811092v1
+--------------------------------------------------
+
+CATEGORIA: GALAXIES
+TÍTULO: The Global, Local and Cluster Galaxy Luminosity Function
+AUTORES: Simon P. Driver, Roberto De Propris
+ARQUIVO: The_Global_Local_and_Cluster_Galaxy_Luminosity_Function.pdf
+LINK ORIGINAL: http://arxiv.org/abs/astro-ph/0212520v1
+--------------------------------------------------
+
 CATEGORIA: NEBULA
 TÍTULO: Planetary Nebulae in the Magellanic Clouds: Probing Stellar Evolution and Populations
 AUTORES: Letizia Stanghellini
@@ -140,6 +182,20 @@ TÍTULO: Spitzer's View of Planetary Nebulae
 AUTORES: Joseph L. Hora
 ARQUIVO: Spitzers_View_of_Planetary_Nebulae.pdf
 LINK ORIGINAL: http://arxiv.org/abs/0708.4175v1
+--------------------------------------------------
+
+CATEGORIA: NEBULA
+TÍTULO: The Evolution and Structure of Pulsar Wind Nebulae
+AUTORES: Bryan M. Gaensler, Patrick O. Slane
+ARQUIVO: The_Evolution_and_Structure_of_Pulsar_Wind_Nebulae.pdf
+LINK ORIGINAL: http://arxiv.org/abs/astro-ph/0601081v1
+--------------------------------------------------
+
+CATEGORIA: NEBULA
+TÍTULO: Supernova remnants, planetary nebulae and superbubbles: prospects for new XMM-Newton observations
+AUTORES: Anne Decourchelle
+ARQUIVO: Supernova_remnants_planetary_nebulae_and_superbubbles_prospects_for_new_XMM-Newton_observations.pdf
+LINK ORIGINAL: http://arxiv.org/abs/0802.0360v1
 --------------------------------------------------
 
 CATEGORIA: PLANETS
@@ -177,6 +233,20 @@ ARQUIVO: Abundances_in_stars_with_exoplanets.pdf
 LINK ORIGINAL: http://arxiv.org/abs/astro-ph/0310377v1
 --------------------------------------------------
 
+CATEGORIA: PLANETS
+TÍTULO: Towards the Albedo of an Exoplanet: MOST Satellite Observations of Bright Transiting Exoplanetary Systems
+AUTORES: Jason F. Rowe, Jaymie M. Matthews, Sara Seager, Dimitar Sasselov, Rainer Kuschnig, David B. Guenther, Anthony F. J. Moffat, Slavek M. Rucinski, Gordon A. H. Walker, Werner W. Weiss
+ARQUIVO: Towards_the_Albedo_of_an_Exoplanet_MOST_Satellite_Observations_of_Bright_Transiting_Exoplanetary_Systems.pdf
+LINK ORIGINAL: http://arxiv.org/abs/0807.1928v1
+--------------------------------------------------
+
+CATEGORIA: PLANETS
+TÍTULO: Exoplanets and the Rossiter-McLaughlin Effect
+AUTORES: Joshua N. Winn
+ARQUIVO: Exoplanets_and_the_Rossiter-McLaughlin_Effect.pdf
+LINK ORIGINAL: http://arxiv.org/abs/astro-ph/0612744v1
+--------------------------------------------------
+
 CATEGORIA: STARS
 TÍTULO: X-rays of Stellar Coronae with Chandra and XMM-Newton: Flares and Elemental Composition in Stellar Atmospheres (Invited review)
 AUTORES: Marc Audard
@@ -211,9 +281,17 @@ AUTORES: G. Michaud, J. Richer
 ARQUIVO: Radiative_Accelerations_in_Stellar_Evolution.pdf
 LINK ORIGINAL: http://arxiv.org/abs/0801.4055v1
 --------------------------------------------------
-BASE 
 
-https://www.inpe.br/ciaa2018/arquivos/pdfs/apostila_completa_2018.pdf
-TÍTULO : INTRODUÇÃO À ASTRONOMIA E ASTROFISÍCA
-AUTORES :Carlos Alexandre Wuensche,André de Castro Milone,Cláudia Vilega Rodrigues,Flávio D’Amico,Francisco José Jablonski,Hugo Vicente Capelato,João Braga,José Roberto Cecatto,José Williams Vilas Boas
-Odylio Denys de Aguiar,Oswaldo Duarte Miranda
+CATEGORIA: STARS
+TÍTULO: X-ray astronomy of stellar coronae (Review)
+AUTORES: Manuel Guedel
+ARQUIVO: X-ray_astronomy_of_stellar_coronae_Review.pdf
+LINK ORIGINAL: http://arxiv.org/abs/astro-ph/0406661v1
+--------------------------------------------------
+
+CATEGORIA: STARS
+TÍTULO: The Evolution of the Interstellar Medium Around Young Stellar Clusters
+AUTORES: D. Calzetti, C. A. Tremonti, T. M. Heckman, C. Leitherer
+ARQUIVO: The_Evolution_of_the_Interstellar_Medium_Around_Young_Stellar_Clusters.pdf
+LINK ORIGINAL: http://arxiv.org/abs/astro-ph/9912504v1
+--------------------------------------------------

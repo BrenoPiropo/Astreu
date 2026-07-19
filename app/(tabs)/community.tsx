@@ -8,7 +8,6 @@ import {
   Alert,
   FlatList,
   Image,
-  Modal,
   Text,
   TouchableOpacity,
   View,
@@ -16,8 +15,8 @@ import {
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 // Importando os estilos e o novo componente da Galeria
+import { styles } from "../styles/CommunityStyles";
 import GalleryTab from "./gallerytab"; // Ajuste o caminho conforme sua estrutura
-import { styles } from "./styles/CommunityStyles";
 
 const BASE_URL = "http://10.0.2.2:3000";
 const API_URL = `${BASE_URL}/posts`;
@@ -130,9 +129,6 @@ export default function CommunityScreen() {
     <View style={[styles.container, { paddingTop: insets.top }]}>
       {/* HEADER */}
       <View style={styles.header}>
-        <TouchableOpacity onPress={() => setMenuVisible(true)}>
-          <MaterialCommunityIcons name="menu" size={28} color="#4CC9F0" />
-        </TouchableOpacity>
         <Text style={styles.headerTitle}>ASTREU HUB</Text>
         <TouchableOpacity onPress={() => router.push("/create-post")}>
           <MaterialCommunityIcons
@@ -199,36 +195,6 @@ export default function CommunityScreen() {
           onOpenDetail={handleOpenDetail}
         />
       )}
-
-      {/* MODAL MENU */}
-      <Modal visible={menuVisible} transparent animationType="slide">
-        <View style={styles.drawerOverlay}>
-          <View style={[styles.drawerContent, { paddingTop: insets.top + 20 }]}>
-            <Text style={styles.userNameText}>
-              Olá, {userData?.nome || "Explorador"}
-            </Text>
-            <TouchableOpacity
-              style={styles.logoutBtn}
-              onPress={() => {
-                AsyncStorage.removeItem("@astreuhub_user");
-                router.replace("/LoginScreen");
-              }}
-            >
-              <Text style={styles.logoutText}>Sair da Missão</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={{ marginTop: 20 }}
-              onPress={() => setMenuVisible(false)}
-            >
-              <Text style={{ color: "#4CC9F0" }}>Fechar</Text>
-            </TouchableOpacity>
-          </View>
-          <TouchableOpacity
-            style={{ flex: 1 }}
-            onPress={() => setMenuVisible(false)}
-          />
-        </View>
-      </Modal>
     </View>
   );
 }

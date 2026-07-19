@@ -15,7 +15,9 @@ const categorias = {
   stars: "all:stellar AND all:review AND cat:astro-ph",
 };
 
-// Limpa o nome do arquivo para o sistema operacional
+// 💡 Definição da quantidade desejada
+const MAX_ARTIGOS = 7;
+
 function sanitizarNomeArquivo(titulo) {
   return titulo
     .replace(/[\r\n]+/g, " ")
@@ -25,7 +27,6 @@ function sanitizarNomeArquivo(titulo) {
     .substring(0, 120);
 }
 
-// Limpa o texto para ficar bonito no arquivo TXT (tira quebras de linha estranhas)
 function limparTexto(texto) {
   return texto
     .replace(/[\r\n]+/g, " ")
@@ -67,39 +68,42 @@ async function baixarPdf(url, caminhoSalvar) {
 }
 
 async function popularBancoDeDados() {
-  console.log("🚀 Iniciando o Seed de Artigos do Astreu Hub...");
+  console.log(
+    `🚀 Iniciando o Seed de Artigos do Astreu Hub (${MAX_ARTIGOS} por categoria)...`,
+  );
   garantirDiretorios();
 
-  // Array que vai guardar todas as informações para o nosso arquivo TXT
   const listaCitacoes = [];
-
-  // Cabeçalho do arquivo TXT
   listaCitacoes.push("==================================================");
-  listaCitacoes.push("   REFERÊNCIAS E CITAÇÕES - ASTREU HUB (TCC)");
+  listaCitacoes.push("    REFERÊNCIAS E CITAÇÕES - ASTREU HUB (TCC)");
   listaCitacoes.push("==================================================\n");
 
   for (const [categoria, query] of Object.entries(categorias)) {
     const pastaDestino = categoryToFolderName(categoria);
     console.log(
-      `\n🌌 Buscando 5 artigos para a categoria: [${pastaDestino}]...`,
+      `\n🌌 Buscando ${MAX_ARTIGOS} artigos para: [${pastaDestino}]...`,
     );
 
     try {
-      const urlArxiv = `http://export.arxiv.org/api/query?search_query=${encodeURIComponent(query)}&max_results=5`;
+      // 💡 Atualizado max_results para MAX_ARTIGOS
+      const urlArxiv = `http://export.arxiv.org/api/query?search_query=${encodeURIComponent(query)}&max_results=${MAX_ARTIGOS}`;
       const response = await axios.get(urlArxiv);
       const xml = response.data;
 
       const entryRegex = /<entry>([\s\S]*?)<\/entry>/g;
       const titleRegex = /<title>([\s\S]*?)<\/title>/;
       const idRegex = /<id>http:\/\/arxiv\.org\/abs\/(.+?)<\/id>/;
-      const authorNameRegex = /<name>([\s\S]*?)<\/name>/g; // Regex para buscar os autores
+      const authorNameRegex = /<name>([\s\S]*?)<\/name>/g;
 
       let matchEntry;
       let contador = 1;
 
-      while ((matchEntry = entryRegex.exec(xml)) !== null && contador <= 5) {
+      // 💡 Atualizado loop para contador <= MAX_ARTIGOS
+      while (
+        (matchEntry = entryRegex.exec(xml)) !== null &&
+        contador <= MAX_ARTIGOS
+      ) {
         const entryContent = matchEntry[1];
-
         const matchTitle = titleRegex.exec(entryContent);
         const matchId = idRegex.exec(entryContent);
 
@@ -107,7 +111,6 @@ async function popularBancoDeDados() {
           const tituloOriginal = limparTexto(matchTitle[1]);
           const artigoId = matchId[1].trim();
 
-          // --- LÓGICA PARA EXTRAIR MÚLTIPLOS AUTORES ---
           const autores = [];
           let matchAuthor;
           while ((matchAuthor = authorNameRegex.exec(entryContent)) !== null) {
@@ -115,7 +118,6 @@ async function popularBancoDeDados() {
           }
           const autoresFormatados =
             autores.length > 0 ? autores.join(", ") : "Autor desconhecido";
-          // ---------------------------------------------
 
           const tituloSanitizado = sanitizarNomeArquivo(tituloOriginal);
           const nomeArquivo = `${tituloSanitizado}.pdf`;
@@ -123,14 +125,13 @@ async function popularBancoDeDados() {
           const pdfUrl = `http://arxiv.org/pdf/${artigoId}.pdf`;
 
           console.log(
-            `  📥 [${contador}/5] Baixando: "${tituloOriginal.substring(0, 45)}..."`,
+            `   📥 [${contador}/${MAX_ARTIGOS}] Baixando: "${tituloOriginal.substring(0, 45)}..."`,
           );
 
           try {
             await baixarPdf(pdfUrl, caminhoSalvar);
-            console.log(`  ✅ Salvo com sucesso!`);
+            console.log(`   ✅ Salvo!`);
 
-            // Adiciona as informações no nosso Array de citações
             listaCitacoes.push(`CATEGORIA: ${pastaDestino.toUpperCase()}`);
             listaCitacoes.push(`TÍTULO: ${tituloOriginal}`);
             listaCitacoes.push(`AUTORES: ${autoresFormatados}`);
@@ -145,7 +146,7 @@ async function popularBancoDeDados() {
             contador++;
           } catch (downloadError) {
             console.error(
-              `  ❌ Falha ao baixar este PDF, pulando...`,
+              `   ❌ Falha ao baixar, pulando...`,
               downloadError.message,
             );
           }
@@ -153,20 +154,16 @@ async function popularBancoDeDados() {
       }
     } catch (error) {
       console.error(
-        `❌ Erro na API do arXiv para a categoria ${pastaDestino}:`,
+        `❌ Erro na API do arXiv para ${pastaDestino}:`,
         error.message,
       );
     }
   }
 
-  // --- GERA O ARQUIVO TXT FINAL ---
   const caminhoCitacoes = path.join(BASE_DIR, "referencias_citacoes.txt");
   fs.writeFileSync(caminhoCitacoes, listaCitacoes.join("\n"), "utf-8");
 
   console.log("\n🎉 Processo finalizado!");
-  console.log(
-    `📄 Arquivo de referências gerado com sucesso em: uploads/seed-articles/referencias_citacoes.txt`,
-  );
 }
 
 popularBancoDeDados();

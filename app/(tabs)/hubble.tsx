@@ -125,7 +125,6 @@ export default function HubbleScreen() {
       <View style={styles.header}>
         <View>
           <Text style={styles.headerSubtitle}>DATASET CIENTÍFICO</Text>
-          <Text style={styles.headerTitle}>Arquivo</Text>
         </View>
         <TouchableOpacity
           style={styles.infoButton}

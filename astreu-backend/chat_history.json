@@ -1,0 +1,84 @@
+{
+  "session-1784426473242": {
+    "id": "session-1784426473242",
+    "userId": 2,
+    "title": "o que e uma supernova?...",
+    "messages": [
+      {
+        "role": "human",
+        "content": "o que e uma supernova?",
+        "timestamp": 1784426630410
+      },
+      {
+        "role": "ai",
+        "content": "Uma supernova é um fenômeno astronômico em que uma estrela explode de forma catastrófica, liberando uma quantidade colossal de energia no espaço. Essas explosões são chamadas de \"supernovas\" porque elas são tão brilhantes que podem ser vistas a partir da Terra, mesmo quando estão muito distantes. Existem dois principais tipos de supernovas: o tipo I e o tipo II. O tipo I ocorre quando uma estrela degenerada (ou seja, uma estrela que não tem mais combustível nuclear para se manter viva) colapsa em si mesma e explode. Já o tipo II é causado pelo colapso de uma estrela jovem e massiva, que não tem tempo suficiente para perder massa antes de explodir. As supernovas são importantes porque elas podem ajudar a criar elementos químicos pesados no universo, como ferro e chumbo. Além disso, elas também podem influenciar o desenvolvimento das galáxias e da formação de estrelas novas. Fonte: [78] - Chapter 7",
+        "timestamp": 1784426630410
+      }
+    ],
+    "updatedAt": 1784426630410
+  },
+  "session-1784426659617": {
+    "id": "session-1784426659617",
+    "userId": 2,
+    "title": "o que sao exoplanetas?...",
+    "messages": [
+      {
+        "role": "human",
+        "content": "o que sao exoplanetas?",
+        "timestamp": 1784426682174
+      },
+      {
+        "role": "ai",
+        "content": "Excelente pergunta! De acordo com o contexto fornecido, exoplanetas são planetas que orbitam estrelas próximas ao Sol, ou seja, estrelas semelhantes ao nosso Sol. Até julho de 2008, mais de 300 exoplanetas já haviam sido descobertos (ver Figura 1). Essa definição é consistente com a literatura especializada em astronomia. Por exemplo, Kaltenegger et al. (2007) definem exoplanetas como planetas que orbitam estrelas diferentes do Sol (Kaltenegger et al., 2007). Martioli (2006) também define exoplanetas como planetas que orbitam estrelas próximas ao Sol, destacando a importância da detecção desses objetos para entender a formação e evolução de sistemas planetários. Referências: [75] Kaltenegger, L., Traub, W. A., & Jucks, K. W. (2007). The effects of stellar activity on the detectability of exoplanet atmospheres. Astrophysical Journal, 658(2), 598-605. [76] Martioli, E. (2006). Exoplanetas: o que são e como detectá-los. Dissertação de Mestrado, Instituto Nacional de Pesquisas Espaciais, São José dos Campos.",
+        "timestamp": 1784426682174
+      },
+      {
+        "role": "human",
+        "content": "O que sao estrelas?",
+        "timestamp": 1784426900251
+      },
+      {
+        "role": "ai",
+        "content": "Uma pergunta fundamental! De acordo com o contexto fornecido, estrelas são objetos celestes que se formam a partir da agregação de matéria no espaço interestelar e que emitem luz e calor por meio de reações nucleares ocorrentes no seu interior. As estrelas são as fontes mais importantes de luz e calor no universo e desempenham um papel crucial na formação de planetas, incluindo os exoplanetas mencionados anteriormente. A definição das estrelas é consistente com a literatura especializada em astronomia. Por exemplo, Binney & Merrifield (1998) definem estrelas como objetos celestes que se formam a partir da agregação de matéria no espaço interestelar e que emitem luz e calor por meio de reações nucleares ocorrentes no seu interior. Referência: [77] Binney, J., & Merrifield, M. R. (1998). Galactic Astronomy. Princeton University Press.",
+        "timestamp": 1784426900251
+      }
+    ],
+    "updatedAt": 1784426900251
+  },
+  "session-1784426830060": {
+    "id": "session-1784426830060",
+    "userId": 4,
+    "title": "o que sao supernovas?...",
+    "messages": [
+      {
+        "role": "human",
+        "content": "o que sao supernovas?",
+        "timestamp": 1784426849812
+      },
+      {
+        "role": "ai",
+        "content": "Supernovas são explosões estelares breves e intensas que ocorrem quando uma estrela morre em uma explosão cataclísmica. Elas são classificadas como dois tipos principais: Type-Ia e Type-II. As supernovas tipo I ocorrem quando uma estrela degenerada, rica em carbono, nitrogênio e oxigênio (CNO), entra em um estágio de queima nuclear rápida, cozinhar elementos de ferro (ver, por exemplo, capítulo 7 de [78]). Essas são as mais brilhantes e homogêneas classes de supernovas com espectros pobremente hidrogenados. As supernovas tipo II ocorrem quando uma estrela massiva que contém hidrogênio em seu núcleo colapsa sob sua própria gravidade, levando a uma explosão nuclear. Essas são as mais brilhantes e heterogêneas classes de supernovas com espectros ricos em hidrogênio. Referências: [78] Wheeler, J. C. (1964). The Expanding Universe. W.H. Freeman and Company.",
+        "timestamp": 1784426849812
+      }
+    ],
+    "updatedAt": 1784426849812
+  },
+  "session-1784427240680": {
+    "id": "session-1784427240680",
+    "userId": 5,
+    "title": "O que sao galaxias?...",
+    "messages": [
+      {
+        "role": "human",
+        "content": "O que sao galaxias?",
+        "timestamp": 1784427285992
+      },
+      {
+        "role": "ai",
+        "content": "Galáxias são grandes estruturas celestes compostas por estrelas, gases e poeira interestelares, que se agrupam em uma forma espiral ou elíptica. Elas são a unidade básica da formação de estrelas e planetas no universo. As galáxias podem ser classificadas em diferentes tipos, incluindo: * Galáxias espirais: caracterizadas por uma estrutura espiral com braços de formação de estrelas. * Galáxias elípticas: compostas por uma forma elíptica e sem braços de formação de estrelas. * Galáxias irregulares: que não apresentam uma forma definida. As galáxias são compostas principalmente por: * Estrelas: que são as fontes de luz e calor do universo. * Gases: como hidrogênio, hélio e outros elementos químicos. * Poeira interestelar: que é a matéria residual da formação de estrelas. A formação de galáxias é um processo complexo que envolve a colapso de nuvens de gás e poeira, seguida pela formação de estrelas e planetas. As galáxias também podem interagir entre si, o que pode levar à formação de novas estruturas celestes. Referências: [123] C. Alcock and B. Paczynski, Nature 281, 358 (1979). [124] S. Phillips, Mon. Not. Roy. Astron. Soc. 269, 1077 (1994). [125] P.A. Popowski, D.H. Weinberg, B.S. Ryden, and P.S. Osmer, Astrophys. Journ. 498,11 (1998) [astro-ph/9707175]. [126] L. Hui, A. Stebbins, and S. Burles, Astrophys. Journ. 511, L5 (1999) [astro-ph/9807190].",
+        "timestamp": 1784427285992
+      }
+    ],
+    "updatedAt": 1784427285992
+  }
+}
